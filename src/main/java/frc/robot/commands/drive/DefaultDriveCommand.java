@@ -2,6 +2,7 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.commands.LoggingCommandBase;
 import frc.robot.operator.GameController;
@@ -42,6 +43,9 @@ public class DefaultDriveCommand extends LoggingCommandBase {
         DriveMode driveMode = driveModeChooser.getSelected();
 
         boolean   boost     = driverController.getRightBumper();
+        boolean   shift     = driverController.getLeftBumper();
+
+        SmartDashboard.putBoolean("Boost", boost);
 
         switch (driveMode) {
 
@@ -66,6 +70,8 @@ public class DefaultDriveCommand extends LoggingCommandBase {
             break;
         }
 
+        driveSubsystem.setShift(shift);
+
     }
 
     // Returns true when the command should end.
@@ -79,6 +85,7 @@ public class DefaultDriveCommand extends LoggingCommandBase {
     @Override
     public void end(boolean interrupted) {
         logCommandEnd(interrupted);
+        SmartDashboard.putBoolean("Boost", false);
     }
 
     private void setMotorSpeedsArcade(double speed, double turn, boolean boost) {

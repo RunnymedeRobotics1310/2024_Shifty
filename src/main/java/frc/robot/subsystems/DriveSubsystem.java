@@ -3,11 +3,12 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.kauailabs.navx.frc.AHRS;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
-import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
@@ -15,44 +16,28 @@ import frc.robot.Constants.DriveConstants;
 public class DriveSubsystem extends SubsystemBase {
 
     // The motors on the left side of the drive.
-    private final TalonSRX     leftPrimaryMotor         = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT);
-    private final TalonSRX     leftFollowerMotor        = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT + 1);
+    private final TalonSRX     leftPrimaryMotor   = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT);
+    private final TalonSRX     leftFollowerMotor  = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT + 1);
 
     // The motors on the right side of the drive.
-    private final TalonSRX     rightPrimaryMotor        = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT);
-    private final TalonSRX     rightFollowerMotor       = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT + 1);
+    private final TalonSRX     rightPrimaryMotor  = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT);
+    private final VictorSPX    rightFollowerMotor = new VictorSPX(DriveConstants.RIGHT_MOTOR_PORT + 1);
 
-    private final DigitalInput targetSensor             = new DigitalInput(0);
+    private final DigitalInput targetSensor       = new DigitalInput(1);
 
-    // Conversion from volts to distance in cm
-    // Volts distance
-    // 0.12 30.5 cm
-    // 2.245 609.6 cm
-    private final AnalogInput  ultrasonicDistanceSensor = new AnalogInput(0);
+    private double             leftSpeed          = 0;
+    private double             rightSpeed         = 0;
 
-    private final double       ULTRASONIC_M             = (609.6 - 30.5) / (2.245 - .12);
-    private final double       ULTRASONIC_B             = 609.6 - ULTRASONIC_M * 2.245;
+    private AnalogGyro         analogGyro         = new AnalogGyro(DriveConstants.ANALOG_GYRO_PORT) {
+                                                      @Override
+                                                      public double getAngle() {
+                                                          // Invert the gyro
+                                                          return -super.getAngle();
+                                                      }
+                                                  };
 
-
-    private double             leftSpeed                = 0;
-    private double             rightSpeed               = 0;
-
-    private AHRS               navXGyro                 = new AHRS() {
-                                                            // Override the "Value" in the gyro
-                                                            // sendable to use the angle instead of
-                                                            // the yaw.
-                                                            // Using the angle makes the gyro appear
-                                                            // in the correct position accounting
-                                                            // for the
-                                                            // offset. The yaw is the raw sensor
-                                                            // value which appears incorrectly on
-                                                            // the dashboard.
-                                                            @Override
-                                                            public void initSendable(SendableBuilder builder) {
-                                                                builder.setSmartDashboardType("Gyro");
-                                                                builder.addDoubleProperty("Value", this::getAngle, null);
-                                                            }
-                                                        };
+    private Solenoid           shifter            = new Solenoid(PneumaticsModuleType.CTREPCM,
+        DriveConstants.SHIFTER_PNEUMATIC_PORT);
 
     /** Creates a new DriveSubsystem. */
     public DriveSubsystem() {
@@ -68,7 +53,6 @@ public class DriveSubsystem extends SubsystemBase {
 
         leftFollowerMotor.follow(leftPrimaryMotor);
 
-
         rightPrimaryMotor.setInverted(DriveConstants.RIGHT_MOTOR_REVERSED);
         rightFollowerMotor.setInverted(DriveConstants.RIGHT_MOTOR_REVERSED);
 
@@ -76,15 +60,9 @@ public class DriveSubsystem extends SubsystemBase {
         rightFollowerMotor.setNeutralMode(NeutralMode.Brake);
 
         rightFollowerMotor.follow(rightPrimaryMotor);
-    }
 
-    public double getUltrasonicDistanceCm() {
-
-        double ultrasonicVoltage = ultrasonicDistanceSensor.getVoltage();
-
-        double distanceCm        = ULTRASONIC_M * ultrasonicVoltage + ULTRASONIC_B;
-
-        return Math.round(distanceCm);
+        analogGyro.initGyro();
+        analogGyro.setSensitivity(0.00165 * (360.0 / 350.0));
     }
 
     /**
@@ -105,9 +83,21 @@ public class DriveSubsystem extends SubsystemBase {
         // motors
     }
 
+    public double getLeftEncoder() {
+        return leftPrimaryMotor.getSelectedSensorPosition();
+    }
+
+    public double getRightEncoder() {
+        return rightPrimaryMotor.getSelectedSensorPosition();
+    }
+
     /** Safely stop the subsystem from moving */
     public void stop() {
         setMotorSpeeds(0, 0);
+    }
+
+    public void setShift(boolean shift) {
+        shifter.set(shift);
     }
 
     public boolean isTargetDetected() {
@@ -120,9 +110,14 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Right Motor", rightSpeed);
         SmartDashboard.putNumber("Left  Motor", leftSpeed);
 
-        SmartDashboard.putNumber("Ultrasonic Voltage", ultrasonicDistanceSensor.getVoltage());
-        SmartDashboard.putNumber("Ultrasonic Distance (cm)", getUltrasonicDistanceCm());
+        SmartDashboard.putNumber("Left  Encoder", getLeftEncoder());
+        SmartDashboard.putNumber("Right Encoder", getRightEncoder());
 
-        SmartDashboard.putData("Gyro", navXGyro);
+        SmartDashboard.putData("Gyro", analogGyro);
+
+        SmartDashboard.putBoolean("Shifter", shifter.get());
+
+        SmartDashboard.putBoolean("Target", isTargetDetected());
     }
+
 }
