@@ -7,19 +7,22 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LightsSubsystem extends SubsystemBase {
 
-    AddressableLED       leds                 = new AddressableLED(0);
-    AddressableLEDBuffer ledBuffer            = new AddressableLEDBuffer(30);
+    // Note: on Shifty, the lights are Y-ed, both of the strips run the same pattern.
 
-
-    private int          rainbowFirstPixelHue = 0;
+    private final AddressableLED       ledStrip;
+    private final AddressableLEDBuffer ledBuffer;
+    private int                        rainbowFirstPixelHue = 0;
 
     /** Creates a new DriveSubsystem. */
     public LightsSubsystem() {
 
-        leds.setLength(ledBuffer.getLength());
+        ledStrip  = new AddressableLED(9);
+        ledBuffer = new AddressableLEDBuffer(30);
 
-        leds.setData(ledBuffer);
-        leds.start();
+        ledStrip.setLength(ledBuffer.getLength());
+        ledStrip.setData(ledBuffer);
+
+        ledStrip.start();
     }
 
 
@@ -46,7 +49,7 @@ public class LightsSubsystem extends SubsystemBase {
     public void periodic() {
 
         updateRainbow();
-        leds.setData(ledBuffer);
+        ledStrip.setData(ledBuffer);
 
         SmartDashboard.putNumber("Hue", rainbowFirstPixelHue);
     }
