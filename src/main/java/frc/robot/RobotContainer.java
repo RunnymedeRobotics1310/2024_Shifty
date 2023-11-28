@@ -55,10 +55,10 @@ public class RobotContainer {
 
     private void initDashboardChoosers() {
 
-        driveModeChooser.setDefaultOption("Dual Stick Arcade", DriveMode.DUAL_STICK_ARCADE);
+        driveModeChooser.setDefaultOption("Tank", DriveMode.TANK);
         SmartDashboard.putData("Drive Mode", driveModeChooser);
+        driveModeChooser.addOption("Dual Stick Arcade", DriveMode.DUAL_STICK_ARCADE);
         driveModeChooser.addOption("Single Stick Arcade", DriveMode.SINGLE_STICK_ARCADE);
-        driveModeChooser.addOption("Tank", DriveMode.TANK);
 
         autoPatternChooser.setDefaultOption("Do Nothing", AutoPattern.DO_NOTHING);
         SmartDashboard.putData("Auto Pattern", autoPatternChooser);
