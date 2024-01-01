@@ -61,7 +61,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         rightFollowerMotor.follow(rightPrimaryMotor);
 
-        analogGyro.initGyro();
+        analogGyro.calibrate();
         analogGyro.setSensitivity(0.00165 * (360.0 / 350.0));
     }
 

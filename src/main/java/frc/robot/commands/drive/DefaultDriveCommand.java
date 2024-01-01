@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants.DriveMode;
-import frc.robot.commands.LoggingCommandBase;
+import frc.robot.commands.LoggingCommand;
 import frc.robot.operator.GameController;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class DefaultDriveCommand extends LoggingCommandBase {
+public class DefaultDriveCommand extends LoggingCommand {
 
     private final DriveSubsystem             driveSubsystem;
     private final XboxController             driverController;
