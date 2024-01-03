@@ -41,4 +41,5 @@
     "editor.formatOnType": true,
   },
   "git.allowForcePush": true,
+  "todo-tree.regex.regex": "(//|#|<!--|;|/\\*{1,2}|^\\s*\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)"
 }
