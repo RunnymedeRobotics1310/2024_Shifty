@@ -4,8 +4,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -28,13 +28,7 @@ public class DriveSubsystem extends SubsystemBase {
     private double             leftSpeed          = 0;
     private double             rightSpeed         = 0;
 
-    private AnalogGyro         analogGyro         = new AnalogGyro(DriveConstants.ANALOG_GYRO_PORT) {
-                                                      @Override
-                                                      public double getAngle() {
-                                                          // Invert the gyro
-                                                          return -super.getAngle();
-                                                      }
-                                                  };
+    private AHRS               navXGyro           = new AHRS();
 
     private Solenoid           shifter            = new Solenoid(PneumaticsModuleType.CTREPCM,
         DriveConstants.SHIFTER_PNEUMATIC_PORT);
@@ -60,9 +54,6 @@ public class DriveSubsystem extends SubsystemBase {
         rightFollowerMotor.setNeutralMode(NeutralMode.Brake);
 
         rightFollowerMotor.follow(rightPrimaryMotor);
-
-        analogGyro.calibrate();
-        analogGyro.setSensitivity(0.00165 * (360.0 / 350.0));
     }
 
     /**
@@ -104,6 +95,14 @@ public class DriveSubsystem extends SubsystemBase {
         return !targetSensor.get();
     }
 
+    public double getHeading() {
+        double heading = Math.round(navXGyro.getYaw() * 10.0) / 10.0;
+        if (heading < 0) {
+            heading += 360;
+        }
+        return heading;
+    }
+
     @Override
     public void periodic() {
 
@@ -113,7 +112,7 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Left  Encoder", getLeftEncoder());
         SmartDashboard.putNumber("Right Encoder", getRightEncoder());
 
-        SmartDashboard.putData("Gyro", analogGyro);
+        SmartDashboard.putNumber("Gyro", getHeading());
 
         SmartDashboard.putBoolean("Shifter", shifter.get());
 

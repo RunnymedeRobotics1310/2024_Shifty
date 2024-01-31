@@ -15,7 +15,7 @@ public class LightsSubsystem extends SubsystemBase {
     private final AddressableLEDBuffer        ledBuffer;
     private static final AddressableLEDBuffer RSL_ON;
     private static final AddressableLEDBuffer RSL_OFF;
-    private static final Color                RSL_COLOR     = new Color(255, 60, 30);
+    private static final Color                RSL_COLOR     = new Color(255, 20, 0);
 
     private int                               rslFlashCount = -1;
     private boolean                           prevRslState  = false;
