@@ -62,4 +62,9 @@ public final class Constants {
         public static final double GAME_CONTROLLER_STICK_DEADBAND = 0.2;
     }
 
+    public static final class LightsConstants {
+
+        public static final int LIGHT_STRING_PWM_PORT = 9;
+        public static final int LIGHT_STRING_LENGTH   = 30;
+    }
 }

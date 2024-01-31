@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants.AutoPattern;
 import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.commands.auto.AutonomousCommand;
@@ -51,6 +54,11 @@ public class RobotContainer {
 
         // Configure the button bindings
         operatorInput.configureButtonBindings(driveSubsystem);
+
+        // Add a trigger for the robot enabled
+        new Trigger(() -> RobotController.isSysActive())
+            .onTrue(
+                new InstantCommand(() -> lightsSubsystem.setEnabled()));
     }
 
     private void initDashboardChoosers() {

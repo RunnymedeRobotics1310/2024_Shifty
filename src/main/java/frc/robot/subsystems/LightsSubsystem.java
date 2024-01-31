@@ -2,22 +2,39 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.LightsConstants;
 
 public class LightsSubsystem extends SubsystemBase {
 
     // Note: on Shifty, the lights are Y-ed, both of the strips run the same pattern.
 
-    private final AddressableLED       ledStrip;
-    private final AddressableLEDBuffer ledBuffer;
-    private int                        rainbowFirstPixelHue = 0;
-    private int                        firstPixelValue      = 0;
+    private final AddressableLED              ledStrip;
+    private final AddressableLEDBuffer        ledBuffer;
+    private static final AddressableLEDBuffer RSL_ON;
+    private static final AddressableLEDBuffer RSL_OFF;
+    private static final Color                RSL_COLOR     = new Color(255, 60, 30);
+
+    private int                               rslFlashCount = -1;
+    private boolean                           prevRslState  = false;
+
+    static {
+        RSL_ON  = new AddressableLEDBuffer(LightsConstants.LIGHT_STRING_LENGTH);
+        RSL_OFF = new AddressableLEDBuffer(LightsConstants.LIGHT_STRING_LENGTH);
+
+        for (int i = 0; i < LightsConstants.LIGHT_STRING_LENGTH; i++) {
+            RSL_ON.setLED(i, RSL_COLOR);
+            RSL_OFF.setLED(i, Color.kBlack);
+        }
+    }
 
     /** Creates a new DriveSubsystem. */
     public LightsSubsystem() {
 
-        ledStrip  = new AddressableLED(9);
-        ledBuffer = new AddressableLEDBuffer(30);
+        ledStrip  = new AddressableLED(LightsConstants.LIGHT_STRING_PWM_PORT);
+        ledBuffer = new AddressableLEDBuffer(LightsConstants.LIGHT_STRING_LENGTH);
 
         ledStrip.setLength(ledBuffer.getLength());
         ledStrip.setData(ledBuffer);
@@ -26,203 +43,38 @@ public class LightsSubsystem extends SubsystemBase {
     }
 
 
-    private void updateRainbow() {
-
-        // For every pixel
-        for (var i = 0; i < ledBuffer.getLength(); i++) {
-
-            // Calculate the hue - hue is easier for rainbows because the color
-            // shape is a circle so only one value needs to precess
-            final var hue = (rainbowFirstPixelHue + (i * 180 / ledBuffer.getLength())) % 180;
-
-            // Set the value
-            ledBuffer.setHSV(i, hue, 255, 128);
-        }
-
-        // Increase by to make the rainbow "move"
-        rainbowFirstPixelHue += 3;
-        // Check bounds
-        rainbowFirstPixelHue %= 180;
-    }
-
-    private void orange() {
-
-        // For every pixel
-        for (var i = 0; i < ledBuffer.getLength(); i++) {
-
-            // Set the value
-            ledBuffer.setHSV(i, 5, 255, 15);
-        }
-
-    }
-
-    private void updateRed() {
-
-        // For every pixel
-        for (var i = 0; i < ledBuffer.getLength(); i++) {
-
-            // Calculate the value - I want the orange to move
-            // shape is a circle so only one value needs to precess
-            final var value = (firstPixelValue + (i * 180 / ledBuffer.getLength())) % 180;
-
-            // Set the value
-            ledBuffer.setHSV(i, 0, 255, value);
-        }
-
-        // Increase by to make the rainbow "move"
-        firstPixelValue += 2;
-
-        // check bounds
-        firstPixelValue %= 180;
-    }
-
-    private void updateOrange() {
-
-        // For every pixel
-        for (var i = 0; i < ledBuffer.getLength(); i++) {
-
-            // Calculate the value - I want the orange to move
-            // shape is a circle so only one value needs to precess
-            final var value = (firstPixelValue + (i * 180 / ledBuffer.getLength())) % 180;
-
-            // Set the value
-            ledBuffer.setHSV(i, 2, 255, value);
-        }
-
-        // Increase by to make the rainbow "move"
-        firstPixelValue += 2;
-
-        // check bounds
-        firstPixelValue %= 180;
-    }
-
-    private void updateYellow() {
-
-        // For every pixel
-        for (var i = 0; i < ledBuffer.getLength(); i++) {
-
-            // Calculate the value - I want the orange to move
-            // shape is a circle so only one value needs to precess
-            final var value = (firstPixelValue + (i * 180 / ledBuffer.getLength())) % 180;
-
-            // Set the value
-            ledBuffer.setHSV(i, 10, 255, value);
-        }
-
-        // Increase by to make the rainbow "move"
-        firstPixelValue += 2;
-
-        // check bounds
-        firstPixelValue %= 180;
-    }
-
-    private void updateGreen() {
-
-        // For every pixel
-        for (var i = 0; i < ledBuffer.getLength(); i++) {
-
-            // Calculate the value - I want the orange to move
-            // shape is a circle so only one value needs to precess
-            final var value = (firstPixelValue + (i * 180 / ledBuffer.getLength())) % 180;
-
-            // Set the value
-            ledBuffer.setHSV(i, 50, 255, value);
-        }
-
-        // Increase by to make the rainbow "move"
-        firstPixelValue += 2;
-
-        // check bounds
-        firstPixelValue %= 180;
-    }
-
-    private void updateBlue() {
-
-        // For every pixel
-        for (var i = 0; i < ledBuffer.getLength(); i++) {
-
-            // Calculate the value - I want the orange to move
-            // shape is a circle so only one value needs to precess
-            final var value = (firstPixelValue + (i * 180 / ledBuffer.getLength())) % 180;
-
-            // Set the value
-            ledBuffer.setHSV(i, 300, 255, value);
-        }
-
-        // Increase by to make the rainbow "move"
-        firstPixelValue += 2;
-
-        // check bounds
-        firstPixelValue %= 180;
-    }
-
-    private void updatePurple() {
-
-        // For every pixel
-        for (var i = 0; i < ledBuffer.getLength(); i++) {
-
-            // Calculate the value - I want the orange to move
-            // shape is a circle so only one value needs to precess
-            final var value = (firstPixelValue + (i * 180 / ledBuffer.getLength())) % 180;
-
-            // Set the value
-            ledBuffer.setHSV(i, 315, 255, value);
-        }
-
-        // Increase by to make the rainbow "move"
-        firstPixelValue += 2;
-
-        // check bounds
-        firstPixelValue %= 180;
-    }
-
-    private void updatePink() {
-
-        // For every pixel
-        for (var i = 0; i < ledBuffer.getLength(); i++) {
-
-            // Calculate the value - I want the orange to move
-            // shape is a circle so only one value needs to precess
-            final var value = (firstPixelValue + (i * 180 / ledBuffer.getLength())) % 180;
-
-            // Set the value
-            ledBuffer.setHSV(i, 359, 255, value);
-        }
-
-        // Increase by to make the rainbow "move"
-        firstPixelValue += 2;
-
-        // check bounds
-        firstPixelValue %= 180;
-    }
-
-    private void endGame() {
-
-        // For every pixel
-        for (var i = 0; i < ledBuffer.getLength(); i++) {
-
-            // Calculate the value - I want the orange to move
-            // shape is a circle so only one value needs to precess
-            final var value = (firstPixelValue + (i * 180 / ledBuffer.getLength())) % 180;
-
-            // Set the value
-            ledBuffer.setHSV(i, 0, 255, value);
-        }
-
-        // Increase by to make the rainbow "move"
-        firstPixelValue -= 10;
-
-        // check bounds
-        firstPixelValue %= 180;
-    }
-
     @Override
     public void periodic() {
 
-        updateOrange();
-        ledStrip.setData(ledBuffer);
-
-        // SmartDashboard.putNumber("Hue", rainbowFirstPixelHue);
+        if (rslFlashCount >= 0) {
+            flashRSL();
+        }
+        else {
+            ledStrip.setData(ledBuffer);
+        }
     }
 
+    private void flashRSL() {
+
+        boolean rslState = RobotController.getRSLState();
+
+        // when the RSL goes from on to off, decrement the flash count
+        if (!rslState && prevRslState) {
+            rslFlashCount--;
+        }
+        prevRslState = RobotController.getRSLState();
+
+        if (rslState) {
+            ledStrip.setData(RSL_ON);
+        }
+        else {
+            ledStrip.setData(RSL_OFF);
+        }
+    }
+
+
+    public void setEnabled() {
+        // Flash the RSL light when the robot is enabled
+        rslFlashCount = 5;
+    }
 }
