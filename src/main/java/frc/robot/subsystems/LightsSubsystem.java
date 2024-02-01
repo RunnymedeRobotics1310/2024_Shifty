@@ -110,4 +110,15 @@ public class LightsSubsystem extends SubsystemBase {
 
         ledBuffer.setLED(1, color);
     }
+
+
+    public void setGamepieceDetected(boolean gamepieceDetected) {
+
+        if (gamepieceDetected) {
+            ledBuffer.setLED(2, new Color(0, 255, 0));
+        }
+        else {
+            ledBuffer.setLED(2, new Color(0, 0, 0));
+        }
+    }
 }

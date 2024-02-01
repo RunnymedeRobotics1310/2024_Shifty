@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
+import frc.robot.commands.shooter.IntakeCommand;
 import frc.robot.commands.shooter.ShootCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -42,6 +43,10 @@ public class OperatorInput extends SubsystemBase {
         return driverController.getYButton();
     }
 
+    public boolean isIntake() {
+        return driverController.getAButton();
+    }
+
     /**
      * Use this method to define your robotFunction -> command mappings.
      *
@@ -55,6 +60,9 @@ public class OperatorInput extends SubsystemBase {
 
         new Trigger(() -> isShoot())
             .onTrue(new ShootCommand(intakeSubsystem, shooterSubsystem));
+
+        new Trigger(() -> isIntake())
+            .onTrue(new IntakeCommand(intakeSubsystem));
     }
 
     @Override

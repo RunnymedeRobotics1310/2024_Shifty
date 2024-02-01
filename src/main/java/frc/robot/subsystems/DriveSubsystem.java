@@ -6,7 +6,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,21 +15,20 @@ import frc.robot.Constants.DriveConstants;
 public class DriveSubsystem extends SubsystemBase {
 
     // The motors on the left side of the drive.
-    private final TalonSRX     leftPrimaryMotor   = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT);
-    private final TalonSRX     leftFollowerMotor  = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT + 1);
+    private final TalonSRX  leftPrimaryMotor   = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT);
+    private final TalonSRX  leftFollowerMotor  = new TalonSRX(DriveConstants.LEFT_MOTOR_PORT + 1);
 
     // The motors on the right side of the drive.
-    private final TalonSRX     rightPrimaryMotor  = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT);
-    private final VictorSPX    rightFollowerMotor = new VictorSPX(DriveConstants.RIGHT_MOTOR_PORT + 1);
+    private final TalonSRX  rightPrimaryMotor  = new TalonSRX(DriveConstants.RIGHT_MOTOR_PORT);
+    private final VictorSPX rightFollowerMotor = new VictorSPX(DriveConstants.RIGHT_MOTOR_PORT + 1);
 
-    private final DigitalInput targetSensor       = new DigitalInput(1);
 
-    private double             leftSpeed          = 0;
-    private double             rightSpeed         = 0;
+    private double          leftSpeed          = 0;
+    private double          rightSpeed         = 0;
 
-    private AHRS               navXGyro           = new AHRS();
+    private AHRS            navXGyro           = new AHRS();
 
-    private Solenoid           shifter            = new Solenoid(PneumaticsModuleType.CTREPCM,
+    private Solenoid        shifter            = new Solenoid(PneumaticsModuleType.CTREPCM,
         DriveConstants.SHIFTER_PNEUMATIC_PORT);
 
     /** Creates a new DriveSubsystem. */
@@ -91,10 +89,6 @@ public class DriveSubsystem extends SubsystemBase {
         shifter.set(shift);
     }
 
-    public boolean isTargetDetected() {
-        return !targetSensor.get();
-    }
-
     public double getHeading() {
         double heading = Math.round(navXGyro.getYaw() * 10.0) / 10.0;
         if (heading < 0) {
@@ -115,8 +109,6 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Gyro", getHeading());
 
         SmartDashboard.putBoolean("Shifter", shifter.get());
-
-        SmartDashboard.putBoolean("Target", isTargetDetected());
     }
 
     public double getHeadingError(double desiredHeading, double currentHeading) {
