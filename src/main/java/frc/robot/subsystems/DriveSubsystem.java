@@ -119,4 +119,17 @@ public class DriveSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Target", isTargetDetected());
     }
 
+    public double getHeadingError(double desiredHeading, double currentHeading) {
+
+        double error = (desiredHeading - currentHeading) % 360;
+        if (error > 180) {
+            error -= 360;
+        }
+        return error;
+        // FIXME: calcuate the heading error based on the desired heading
+        // by convention, when calculating the error for a PID feedback
+        // loop the formula for error is:
+        // error = desiredValue (setpoint) - actualValue (measurement)
+    }
+
 }

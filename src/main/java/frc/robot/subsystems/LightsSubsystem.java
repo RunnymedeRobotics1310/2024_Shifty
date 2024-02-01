@@ -77,4 +77,37 @@ public class LightsSubsystem extends SubsystemBase {
         // Flash the RSL light when the robot is enabled
         rslFlashCount = 5;
     }
+
+
+    public void setShooterSpeed(double actualMotorSpeed, boolean atTargetSpeed) {
+
+        Color color = new Color(0, 0, 0);
+
+        if (actualMotorSpeed > 0) {
+
+            color = new Color(0, 255, 0);
+
+            if (!atTargetSpeed) {
+                color = new Color(255, 0, 0);
+            }
+        }
+
+        ledBuffer.setLED(0, color);
+    }
+
+    public void setIntakeSpeed(double actualMotorSpeed, boolean atTargetSpeed) {
+
+        Color color = new Color(0, 0, 0);
+
+        if (actualMotorSpeed > 0) {
+
+            color = new Color(0, 255, 0);
+
+            if (!atTargetSpeed) {
+                color = new Color(255, 0, 0);
+            }
+        }
+
+        ledBuffer.setLED(1, color);
+    }
 }

@@ -16,7 +16,9 @@ import frc.robot.commands.auto.AutonomousCommand;
 import frc.robot.commands.drive.DefaultDriveCommand;
 import frc.robot.operator.OperatorInput;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LightsSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -28,11 +30,15 @@ import frc.robot.subsystems.LightsSubsystem;
 public class RobotContainer {
 
     // The operator input class
-    private final OperatorInput                operatorInput      = new OperatorInput();
+    private final OperatorInput    operatorInput    = new OperatorInput();
 
     // The robot's subsystems and commands are defined here...
-    private final DriveSubsystem               driveSubsystem     = new DriveSubsystem();
-    private final LightsSubsystem              lightsSubsystem    = new LightsSubsystem();
+    private final DriveSubsystem   driveSubsystem   = new DriveSubsystem();
+    private final LightsSubsystem  lightsSubsystem  = new LightsSubsystem();
+    private final IntakeSubsystem  IntakeSubsystem  = new IntakeSubsystem(lightsSubsystem);
+    private final ShooterSubsystem ShooterSubsystem = new ShooterSubsystem(lightsSubsystem);
+
+
 
     // All dashboard choosers are defined here...
     private final SendableChooser<DriveMode>   driveModeChooser   = new SendableChooser<>();
@@ -53,7 +59,7 @@ public class RobotContainer {
         initDashboardChoosers();
 
         // Configure the button bindings
-        operatorInput.configureButtonBindings(driveSubsystem);
+        operatorInput.configureButtonBindings(driveSubsystem, ShooterSubsystem, IntakeSubsystem);
 
         // Add a trigger for the robot enabled
         new Trigger(() -> RobotController.isSysActive())
@@ -71,6 +77,7 @@ public class RobotContainer {
         autoPatternChooser.setDefaultOption("Do Nothing", AutoPattern.DO_NOTHING);
         SmartDashboard.putData("Auto Pattern", autoPatternChooser);
         autoPatternChooser.addOption("Drive Forward", AutoPattern.DRIVE_FORWARD);
+        autoPatternChooser.addOption("Three Note", AutoPattern.THREE_NOTE);
     }
 
     /**

@@ -5,7 +5,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
+import frc.robot.commands.shooter.ShootCommand;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 /**
  * The Operator input class is used to map buttons to functions and functions to commands
@@ -35,16 +38,23 @@ public class OperatorInput extends SubsystemBase {
         return driverController.getStartButton();
     }
 
+    public boolean isShoot() {
+        return driverController.getYButton();
+    }
+
     /**
      * Use this method to define your robotFunction -> command mappings.
      *
      * NOTE: all subsystems should be passed into this method.
      */
-    public void configureButtonBindings(DriveSubsystem driveSubsystem) {
+    public void configureButtonBindings(DriveSubsystem driveSubsystem, ShooterSubsystem shooterSubsystem,
+        IntakeSubsystem intakeSubsystem) {
 
         new Trigger(() -> isCancel())
             .onTrue(new CancelCommand(this, driveSubsystem));
 
+        new Trigger(() -> isShoot())
+            .onTrue(new ShootCommand(intakeSubsystem, shooterSubsystem));
     }
 
     @Override

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants.AutoPattern;
+import frc.robot.commands.drive.DriveOnHeadingCommand;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class AutonomousCommand extends SequentialCommandGroup {
@@ -16,7 +17,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
 
     private final DriveSubsystem driveSubsystem;
 
-    private Optional<Alliance>             alliance    = null;
+    private Optional<Alliance>   alliance    = null;
 
     public AutonomousCommand(DriveSubsystem driveSubsystem,
         SendableChooser<AutoPattern> autoPatternChooser) {
@@ -35,7 +36,7 @@ public class AutonomousCommand extends SequentialCommandGroup {
         if (!alliance.isPresent()) {
             System.out.println("*** ERROR **** unknown Alliance ");
         }
-        
+
         StringBuilder sb = new StringBuilder();
         sb.append("Auto Selections");
         sb.append("\n   Auto Pattern  : ").append(autoPattern);
@@ -58,9 +59,16 @@ public class AutonomousCommand extends SequentialCommandGroup {
             return;
 
         case DRIVE_FORWARD:
-            // What should we put here?
-            // Drive forward for 1 second
-            // addCommands(new DriveForwardCommand(1, driveSubsystem));
+            return;
+        // What should we put here?
+        // Drive forward for 1 second
+        // addCommands(new DriveForwardCommand(1, driveSubsystem));
+        case THREE_NOTE:
+            addCommands(new DriveOnHeadingCommand(0, 1, 0.5, driveSubsystem)
+                .andThen(
+                    new DriveOnHeadingCommand(315, 1.4, -0.5, driveSubsystem))
+                .andThen(
+                    new DriveOnHeadingCommand(0, 1, 0.5, driveSubsystem)));
         }
     }
 
