@@ -61,7 +61,7 @@ public class RobotContainer {
         initDashboardChoosers();
 
         // Configure the button bindings
-        operatorInput.configureButtonBindings(driveSubsystem, ShooterSubsystem, IntakeSubsystem);
+        operatorInput.configureButtonBindings(driveSubsystem, ShooterSubsystem, IntakeSubsystem, visionSubsystem);
 
         // Add a trigger for the robot enabled
         new Trigger(() -> RobotController.isSysActive())

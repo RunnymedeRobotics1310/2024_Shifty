@@ -45,7 +45,7 @@ public class VisionSubsystem extends SubsystemBase {
     private VisionConstants.VisionTarget currentVisionTarget                  = VisionConstants.VisionTarget.NONE;
 
     public VisionSubsystem() {
-        setVisionTarget(VisionTarget.NOTES);
+        setVisionTarget(VisionTarget.APRILTAGS);
     }
 
     public double getTargetAreaPercent() {
@@ -89,36 +89,6 @@ public class VisionSubsystem extends SubsystemBase {
         return tv.getDouble(-1) == 1;
     }
 
-    /**
-     * Get the Target Angle Offset in degrees
-     * <p>
-     * Check whether a target is acquired using {@link #isVisionTargetFound()}
-     *
-     * @return degrees in horizontal angle offset from the current crosshairs. or {@code 0} if no
-     * target is currently found.
-     */
-    public double getTargetAngleOffset() {
-
-        if (!isVisionTargetFound()) {
-            return 0;
-        }
-
-        // Return the angle offset based on the target
-        if (currentVisionTarget == VisionConstants.VisionTarget.NOTES) {
-
-            // CUBE offset measurements.
-
-            // At a y value of +17, the x offset is +7
-            // At a y value of -14, the x offset is +10
-
-            return getTargetX() - 10 + (14 + getTargetY()) / 10;
-        }
-        else if (currentVisionTarget == VisionConstants.VisionTarget.APRILTAGS) {
-            return getTargetX() - 10;
-        }
-
-        return getTarget()[0];
-    }
 
     public double getTargetDistanceCm() {
         return -1.0; // fixme: calculate distance
@@ -204,7 +174,7 @@ public class VisionSubsystem extends SubsystemBase {
      *
      * @return limelight X target coordinates
      */
-    private double getTargetX() {
+    public double getTargetX() {
         return tx.getDouble(-1.0);
     }
 
