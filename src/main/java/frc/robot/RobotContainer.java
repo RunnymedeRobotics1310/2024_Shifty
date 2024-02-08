@@ -19,6 +19,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LightsSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -35,6 +36,7 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final DriveSubsystem   driveSubsystem   = new DriveSubsystem();
     private final LightsSubsystem  lightsSubsystem  = new LightsSubsystem();
+    private final VisionSubsystem  visionSubsystem  = new VisionSubsystem();
     private final IntakeSubsystem  IntakeSubsystem  = new IntakeSubsystem(lightsSubsystem);
     private final ShooterSubsystem ShooterSubsystem = new ShooterSubsystem(lightsSubsystem);
 
@@ -59,7 +61,7 @@ public class RobotContainer {
         initDashboardChoosers();
 
         // Configure the button bindings
-        operatorInput.configureButtonBindings(driveSubsystem, ShooterSubsystem, IntakeSubsystem);
+        operatorInput.configureButtonBindings(driveSubsystem, ShooterSubsystem, IntakeSubsystem, visionSubsystem);
 
         // Add a trigger for the robot enabled
         new Trigger(() -> RobotController.isSysActive())
