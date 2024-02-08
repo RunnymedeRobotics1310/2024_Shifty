@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
 import frc.robot.commands.shooter.IntakeCommand;
-import frc.robot.commands.shooter.ShootCommand;
+import frc.robot.commands.shooter.ShootOnHeadingCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -59,7 +59,7 @@ public class OperatorInput extends SubsystemBase {
             .onTrue(new CancelCommand(this, driveSubsystem));
 
         new Trigger(() -> isShoot())
-            .onTrue(new ShootCommand(intakeSubsystem, shooterSubsystem));
+            .onTrue(new ShootOnHeadingCommand(90, intakeSubsystem, shooterSubsystem, driveSubsystem));
 
         new Trigger(() -> isIntake())
             .onTrue(new IntakeCommand(intakeSubsystem));

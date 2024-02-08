@@ -4,34 +4,43 @@
 
 package frc.robot.commands.shooter;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-
-public class ShootCommand extends Command {
+public class ShootOnHeadingCommand extends Command {
 
     private final ShooterSubsystem shooterSubsystem;
     private final IntakeSubsystem  intakeSubsystem;
+    private final DriveSubsystem   driveSubsystem;
+    private final double           heading;
+    private double                 headingError;
+
 
     private long                   startTimeMs = 0;
 
     /**
-     * DriveForTime command drives at the specified heading at the specified speed for the specified
-     * time.
+     * ShootOnHeading command turns to the specified heading then shoots
      *
-     * @param timeoutSeconds to run the command
-     * @param speed in the range -1.0 to
+     * @param driveSubsystem
+     * @param heading
      */
-    public ShootCommand(IntakeSubsystem intakeSubsystem, ShooterSubsystem shooterSubsystem) {
+
+    public ShootOnHeadingCommand(double heading, IntakeSubsystem intakeSubsystem, ShooterSubsystem shooterSubsystem,
+        DriveSubsystem driveSubsystem) {
 
         this.shooterSubsystem = shooterSubsystem;
         this.intakeSubsystem  = intakeSubsystem;
+        this.driveSubsystem   = driveSubsystem;
+        this.heading          = heading;
 
 
         // Add required subsystems
         addRequirements(shooterSubsystem);
         addRequirements(intakeSubsystem);
+        addRequirements(driveSubsystem);
     }
 
     // Called when the command is initially scheduled.
@@ -39,12 +48,16 @@ public class ShootCommand extends Command {
     public void initialize() {
         startTimeMs = System.currentTimeMillis();
         shooterSubsystem.setShooterSpeed(.2);
-
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        headingError = driveSubsystem.getHeadingError(heading, driveSubsystem.getHeading());
+        double errorF = headingError * 0.02;
+        SmartDashboard.putNumber("errorF", errorF);
+        driveSubsystem.setMotorSpeeds(+errorF, -errorF);
+
         if ((System.currentTimeMillis() - startTimeMs) > 3000) {
             intakeSubsystem.setIntakeSpeed(.1);
         }
@@ -65,12 +78,12 @@ public class ShootCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-
-        if (System.currentTimeMillis() - startTimeMs >= 4500) {
-            System.out.println("Command finished");
-            return true;
+        if (headingError < 0.5) {
+            if (System.currentTimeMillis() - startTimeMs >= 4500) {
+                System.out.println("Command finished");
+                return true;
+            }
         }
-
         return false;
     }
 }

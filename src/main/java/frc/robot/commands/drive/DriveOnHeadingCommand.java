@@ -55,7 +55,7 @@ public class DriveOnHeadingCommand extends Command {
         double errorF = headingError * 0.02;
         driveSubsystem.setMotorSpeeds(speed + errorF, speed - errorF);
 
-        SmartDashboard.putNumber("Error", headingError);
+        SmartDashboard.putNumber("Shooting Error", headingError);
         System.out.println("Command executed");
         // Nothing to do here except wait for the end
     }

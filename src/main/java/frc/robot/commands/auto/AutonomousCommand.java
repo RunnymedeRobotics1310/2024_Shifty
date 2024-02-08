@@ -64,11 +64,13 @@ public class AutonomousCommand extends SequentialCommandGroup {
         // Drive forward for 1 second
         // addCommands(new DriveForwardCommand(1, driveSubsystem));
         case THREE_NOTE:
-            addCommands(new DriveOnHeadingCommand(0, 1, 0.5, driveSubsystem)
-                .andThen(
-                    new DriveOnHeadingCommand(315, 1.4, -0.5, driveSubsystem))
-                .andThen(
-                    new DriveOnHeadingCommand(0, 1, 0.5, driveSubsystem)));
+            addCommands(
+
+                new DriveOnHeadingCommand(0, 1, 0.5, driveSubsystem)
+                    .andThen(
+                        new DriveOnHeadingCommand(90, 1, -0.5, driveSubsystem))
+
+            );
         }
     }
 
