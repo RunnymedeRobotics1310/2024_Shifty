@@ -14,13 +14,6 @@ public class IntakeCommand extends Command {
 
     private long                  startTimeMs = 0;
 
-    /**
-     * DriveForTime command drives at the specified heading at the specified speed for the specified
-     * time.
-     *
-     * @param timeoutSeconds to run the command
-     * @param speed in the range -1.0 to
-     */
     public IntakeCommand(IntakeSubsystem intakeSubsystem) {
 
         this.intakeSubsystem = intakeSubsystem;

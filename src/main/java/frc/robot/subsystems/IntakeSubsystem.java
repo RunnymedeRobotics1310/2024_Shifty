@@ -34,7 +34,9 @@ public class IntakeSubsystem extends SubsystemBase {
     public void periodic() {
 
         SmartDashboard.putNumber("Intake Speed", motorSpeed);
+        SmartDashboard.putNumber("Shooter Speed", motorSpeed);
         SmartDashboard.putNumber("Actual Intake Speed", actualMotorSpeed);
+        SmartDashboard.putNumber("Actual Shooter Speed", actualMotorSpeed);
         SmartDashboard.putBoolean("Is Gamepiece Detected", isGamepieceDetected());
 
         if (motorSpeed > actualMotorSpeed) {

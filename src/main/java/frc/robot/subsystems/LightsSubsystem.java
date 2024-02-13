@@ -79,15 +79,15 @@ public class LightsSubsystem extends SubsystemBase {
     }
 
 
-    public void setShooterSpeed(double actualMotorSpeed, boolean atTargetSpeed) {
+    public void setShooterSpeed(double encoderShooterSpeed, boolean shooterAtTargetSpeed) {
 
         Color color = new Color(0, 0, 0);
 
-        if (actualMotorSpeed > 0) {
+        if (encoderShooterSpeed > 0) {
 
             color = new Color(0, 255, 0);
 
-            if (!atTargetSpeed) {
+            if (!shooterAtTargetSpeed) {
                 color = new Color(255, 0, 0);
             }
         }
@@ -95,15 +95,15 @@ public class LightsSubsystem extends SubsystemBase {
         ledBuffer.setLED(0, color);
     }
 
-    public void setIntakeSpeed(double actualMotorSpeed, boolean atTargetSpeed) {
+    public void setIntakeSpeed(double encoderIntakeSpeed, boolean intakeAtTargetSpeed) {
 
         Color color = new Color(0, 0, 0);
 
-        if (actualMotorSpeed > 0) {
+        if (encoderIntakeSpeed > 0) {
 
             color = new Color(0, 255, 0);
 
-            if (!atTargetSpeed) {
+            if (!intakeAtTargetSpeed) {
                 color = new Color(255, 0, 0);
             }
         }
@@ -111,6 +111,37 @@ public class LightsSubsystem extends SubsystemBase {
         ledBuffer.setLED(1, color);
     }
 
+    public void setArmAngle(double ArmAngle, boolean armAtTargetAngle) {
+
+        Color color = new Color(0, 0, 0);
+
+        if (ArmAngle > 0) {
+
+            color = new Color(0, 255, 0);
+
+            if (!armAtTargetAngle) {
+                color = new Color(255, 0, 0);
+            }
+        }
+
+        ledBuffer.setLED(2, color);
+    }
+
+    public void setAimAngle(double AimAngle, boolean aimAtTargetAngle) {
+
+        Color color = new Color(0, 0, 0);
+
+        if (AimAngle > 0) {
+
+            color = new Color(0, 255, 0);
+
+            if (!aimAtTargetAngle) {
+                color = new Color(255, 0, 0);
+            }
+        }
+
+        ledBuffer.setLED(3, color);
+    }
 
     public void setGamepieceDetected(boolean gamepieceDetected) {
 
