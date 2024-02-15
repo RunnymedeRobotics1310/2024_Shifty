@@ -10,8 +10,6 @@ public class ArmSubsystem extends SubsystemBase {
 
     private double                armSpeed            = 0;
     private double                aimSpeed            = 0;
-    private double                armAngle            = 0;
-    private double                aimAngle            = 0;
     private double                intakeSpeed         = 0;
     private double                shooterSpeed        = 0;
 
@@ -19,6 +17,8 @@ public class ArmSubsystem extends SubsystemBase {
     private double                encoderAimSpeed     = 0;
     private double                encoderIntakeSpeed  = 0;
     private double                encoderShooterSpeed = 0;
+    private double                encoderArmAngle     = 0;
+    private double                encoderAimAngle     = 0;
 
     private DigitalInput          noteDetector        = new DigitalInput(1);
 
@@ -35,9 +35,11 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setIntakeSpeed(double intakeSpeed) {
+        this.intakeSpeed = intakeSpeed;
     }
 
     public void setShooterSpeed(double shooterSpeed) {
+        this.shooterSpeed = shooterSpeed;
     }
 
     public void stop() {
@@ -66,11 +68,11 @@ public class ArmSubsystem extends SubsystemBase {
 
         SmartDashboard.putNumber("Arm Speed", armSpeed);
         SmartDashboard.putNumber("Encoder Arm Speed", encoderArmSpeed);
-        SmartDashboard.putNumber("Arm Angle", armAngle);
+        SmartDashboard.putNumber("Arm Angle", encoderArmAngle);
 
         SmartDashboard.putNumber("Aim Speed", aimSpeed);
         SmartDashboard.putNumber("Encoder Aim Speed", encoderAimSpeed);
-        SmartDashboard.putNumber("Aim Angle", aimAngle);
+        SmartDashboard.putNumber("Aim Angle", encoderAimAngle);
 
         SmartDashboard.putBoolean("Is Gamepiece Detected", isGamepieceDetected());
 

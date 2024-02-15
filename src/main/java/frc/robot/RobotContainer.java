@@ -15,6 +15,7 @@ import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.commands.auto.AutonomousCommand;
 import frc.robot.commands.drive.DefaultDriveCommand;
 import frc.robot.operator.OperatorInput;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LightsSubsystem;
@@ -39,6 +40,7 @@ public class RobotContainer {
     private final VisionSubsystem  visionSubsystem  = new VisionSubsystem();
     private final IntakeSubsystem  IntakeSubsystem  = new IntakeSubsystem(lightsSubsystem);
     private final ShooterSubsystem ShooterSubsystem = new ShooterSubsystem(lightsSubsystem);
+    private final ArmSubsystem     ArmSubsystem     = new ArmSubsystem(lightsSubsystem);
 
 
 
