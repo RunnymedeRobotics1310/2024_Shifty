@@ -18,9 +18,9 @@ import frc.robot.operator.OperatorInput;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.JackmanVisionSubsystem;
 import frc.robot.subsystems.LightsSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -32,15 +32,15 @@ import frc.robot.subsystems.VisionSubsystem;
 public class RobotContainer {
 
     // The operator input class
-    private final OperatorInput    operatorInput    = new OperatorInput();
+    private final OperatorInput          operatorInput    = new OperatorInput();
 
     // The robot's subsystems and commands are defined here...
-    private final DriveSubsystem   driveSubsystem   = new DriveSubsystem();
-    private final LightsSubsystem  lightsSubsystem  = new LightsSubsystem();
-    private final VisionSubsystem  visionSubsystem  = new VisionSubsystem();
-    private final IntakeSubsystem  IntakeSubsystem  = new IntakeSubsystem(lightsSubsystem);
-    private final ShooterSubsystem ShooterSubsystem = new ShooterSubsystem(lightsSubsystem);
-    private final ArmSubsystem     ArmSubsystem     = new ArmSubsystem(lightsSubsystem);
+    private final DriveSubsystem         driveSubsystem   = new DriveSubsystem();
+    private final LightsSubsystem        lightsSubsystem  = new LightsSubsystem();
+    private final JackmanVisionSubsystem visionSubsystem  = new JackmanVisionSubsystem();
+    private final IntakeSubsystem        IntakeSubsystem  = new IntakeSubsystem(lightsSubsystem);
+    private final ShooterSubsystem       ShooterSubsystem = new ShooterSubsystem(lightsSubsystem);
+    private final ArmSubsystem           ArmSubsystem     = new ArmSubsystem(lightsSubsystem);
 
 
 

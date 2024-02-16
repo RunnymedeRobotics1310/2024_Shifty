@@ -10,8 +10,8 @@ import frc.robot.commands.shooter.IntakeCommand;
 import frc.robot.commands.shooter.ShootCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.JackmanVisionSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
 
 /**
  * The Operator input class is used to map buttons to functions and functions to commands
@@ -59,7 +59,7 @@ public class OperatorInput extends SubsystemBase {
      * NOTE: all subsystems should be passed into this method.
      */
     public void configureButtonBindings(DriveSubsystem driveSubsystem, ShooterSubsystem shooterSubsystem,
-        IntakeSubsystem intakeSubsystem, VisionSubsystem visionSubsystem) {
+        IntakeSubsystem intakeSubsystem, JackmanVisionSubsystem visionSubsystem) {
 
         new Trigger(() -> isCancel())
             .onTrue(new CancelCommand(this, driveSubsystem));

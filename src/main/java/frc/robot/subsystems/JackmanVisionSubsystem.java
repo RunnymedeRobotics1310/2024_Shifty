@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.VisionConstants;
 import frc.robot.VisionConstants.VisionTarget;
 
-public class VisionSubsystem extends SubsystemBase {
+public class JackmanVisionSubsystem extends SubsystemBase {
 
     private static final long            LED_MODE_PIPELINE                    = 0;
     private static final long            LED_MODE_OFF                         = 1;
@@ -44,7 +44,7 @@ public class VisionSubsystem extends SubsystemBase {
 
     private VisionConstants.VisionTarget currentVisionTarget                  = VisionConstants.VisionTarget.NONE;
 
-    public VisionSubsystem() {
+    public JackmanVisionSubsystem() {
         setVisionTarget(VisionTarget.APRILTAGS);
     }
 
