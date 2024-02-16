@@ -7,18 +7,18 @@ package frc.robot.commands.drive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.JackmanVisionSubsystem;
 
 
 public class DriveToTargetCommand extends Command {
 
-    private final double          timeoutSeconds;
-    private final double          speed;
-    private final DriveSubsystem  driveSubsystem;
-    private double                desiredHeadingDelta;
-    private final VisionSubsystem visionSubsystem;
+    private final double                 timeoutSeconds;
+    private final double                 speed;
+    private final DriveSubsystem         driveSubsystem;
+    private double                       desiredHeadingDelta;
+    private final JackmanVisionSubsystem visionSubsystem;
 
-    private long                  startTimeMs = 0;
+    private long                         startTimeMs = 0;
 
     /**
      * DriveForTime command drives at the specified heading at the specified speed for the specified
@@ -29,7 +29,7 @@ public class DriveToTargetCommand extends Command {
      * @param driveSubsystem
      */
     public DriveToTargetCommand(double timeoutSeconds, double speed, DriveSubsystem driveSubsystem,
-        VisionSubsystem visionSubsystem) {
+        JackmanVisionSubsystem visionSubsystem) {
 
         this.visionSubsystem = visionSubsystem;
         this.timeoutSeconds  = timeoutSeconds;
