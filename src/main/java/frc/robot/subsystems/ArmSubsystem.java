@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ArmConstants;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -13,8 +14,6 @@ public class ArmSubsystem extends SubsystemBase {
     private double                intakeSpeed         = 0;
     private double                shooterSpeed        = 0;
 
-    private double                armSpeedEncoder     = 0;
-    private double                aimSpeedEncoder     = 0;
     private double                intakeSpeedEncoder  = 0;
     private double                shooterSpeedEncoder = 0;
     private double                armAngleEncoder     = 0;
@@ -23,11 +22,19 @@ public class ArmSubsystem extends SubsystemBase {
     private DigitalInput          noteDetector        = new DigitalInput(1);
 
     public ArmSubsystem(LightsSubsystem lightsSubsystem) {
+
         this.lightsSubsystem = lightsSubsystem;
+
+        // This is faking an angle encoder
+        this.aimAngleEncoder = ArmConstants.COMPACT_ARM_POSITION.aimAngle;
+        this.armAngleEncoder = ArmConstants.COMPACT_ARM_POSITION.armAngle;
     }
 
     public double getAimAngle() {
-        // FIXME: Convert encoder to angle
+        return aimAngleEncoder;
+    }
+
+    public double getArmAngle() {
         return aimAngleEncoder;
     }
 
@@ -37,11 +44,11 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setArmSpeed(double speed) {
-        armSpeed = speed;
+        this.armSpeed = speed;
     }
 
     public void setAimSpeed(double speed) {
-        armSpeed = speed;
+        this.aimSpeed = speed;
     }
 
     public void setIntakeSpeed(double intakeSpeed) {
@@ -57,8 +64,6 @@ public class ArmSubsystem extends SubsystemBase {
         setAimSpeed(0);
         setIntakeSpeed(0);
         setShooterSpeed(0);
-        armSpeedEncoder     = 0;
-        aimSpeedEncoder     = 0;
         intakeSpeedEncoder  = 0;
         shooterSpeedEncoder = 0;
     }
@@ -77,14 +82,16 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Encoder Shooter Speed", shooterSpeedEncoder);
 
         SmartDashboard.putNumber("Arm Speed", armSpeed);
-        SmartDashboard.putNumber("Encoder Arm Speed", armSpeedEncoder);
-        SmartDashboard.putNumber("Arm Angle", armAngleEncoder);
+        SmartDashboard.putNumber("Arm Angle", getArmAngle());
 
         SmartDashboard.putNumber("Aim Speed", aimSpeed);
-        SmartDashboard.putNumber("Encoder Aim Speed", aimSpeedEncoder);
-        SmartDashboard.putNumber("Aim Angle", aimAngleEncoder);
+        SmartDashboard.putNumber("Aim Angle", getAimAngle());
 
         SmartDashboard.putBoolean("Is Gamepiece Detected", isGamepieceDetected());
+
+        // Move the aim and arm angles based on the speed.
+        aimAngleEncoder += aimSpeed;
+        armAngleEncoder += armSpeed;
 
         if (intakeSpeed > intakeSpeedEncoder) {
             intakeSpeedEncoder += .002;
@@ -93,11 +100,6 @@ public class ArmSubsystem extends SubsystemBase {
             intakeSpeedEncoder -= .002;
         }
 
-        boolean intakeAtTargetSpeed = Math.abs(shooterSpeed - intakeSpeedEncoder) < .05;
-
-        lightsSubsystem.setIntakeSpeed(intakeSpeedEncoder, intakeAtTargetSpeed);
-
-
         if (shooterSpeed > shooterSpeedEncoder) {
             shooterSpeedEncoder += .002;
         }
@@ -105,13 +107,23 @@ public class ArmSubsystem extends SubsystemBase {
             shooterSpeedEncoder -= .002;
         }
 
+
+        updateLights();
+    }
+
+    private void updateLights() {
+
+        boolean intakeAtTargetSpeed = Math.abs(shooterSpeed - intakeSpeedEncoder) < .05;
+
+        lightsSubsystem.setIntakeSpeed(intakeSpeedEncoder, intakeAtTargetSpeed);
+
         boolean shooterAtTargetSpeed = Math.abs(shooterSpeed - shooterSpeedEncoder) < .05;
 
         lightsSubsystem.setShooterSpeed(shooterSpeedEncoder, shooterAtTargetSpeed);
 
-        lightsSubsystem.setArmAngle(armSpeedEncoder, shooterAtTargetSpeed);
+        lightsSubsystem.setArmAngle(getArmAngle());
 
-        lightsSubsystem.setAimAngle(aimSpeedEncoder, shooterAtTargetSpeed);
+        lightsSubsystem.setAimAngle(getAimAngle());
     }
 
 }
