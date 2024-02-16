@@ -28,7 +28,7 @@ public class VisionSubsystem extends SubsystemBase {
     private static final long            PIPELINE_NEURALNET_NOTE_DETECT       = 7;
 
     NetworkTable                         table                                = NetworkTableInstance.getDefault()
-        .getTable("limelight");
+        .getTable("limelight-jackman");
 
     // inputs/configs
     NetworkTableEntry                    ledMode                              = table.getEntry("ledMode");
