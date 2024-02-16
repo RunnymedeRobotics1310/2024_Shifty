@@ -6,6 +6,7 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.VisionConstants.VisionTarget;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JackmanVisionSubsystem;
 
@@ -47,6 +48,8 @@ public class DriveToTargetCommand extends Command {
         startTimeMs = System.currentTimeMillis();
         SmartDashboard.putNumber("heading", driveSubsystem.getHeading() + visionSubsystem.getTargetX());
         System.out.println("Command initialized");
+
+        visionSubsystem.setVisionTarget(VisionTarget.APRILTAGS);
     }
 
     // Called every time the scheduler runs while the command is scheduled.

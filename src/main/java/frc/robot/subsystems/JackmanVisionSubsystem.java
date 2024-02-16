@@ -1,5 +1,9 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -9,6 +13,7 @@ import frc.robot.VisionConstants;
 import frc.robot.VisionConstants.VisionTarget;
 
 public class JackmanVisionSubsystem extends SubsystemBase {
+
 
     private static final long            LED_MODE_PIPELINE                    = 0;
     private static final long            LED_MODE_OFF                         = 1;
@@ -40,7 +45,19 @@ public class JackmanVisionSubsystem extends SubsystemBase {
     NetworkTableEntry                    tx                                   = table.getEntry("tx");
     NetworkTableEntry                    ty                                   = table.getEntry("ty");
     NetworkTableEntry                    ta                                   = table.getEntry("ta");
+
     NetworkTableEntry                    tl                                   = table.getEntry("tl");
+    NetworkTableEntry                    cl                                   = table.getEntry("cl");
+
+    NetworkTableEntry                    botpose_wpiblue                      = table.getEntry("botpose_wpiblue");
+    NetworkTableEntry                    botpose_wpired                       = table.getEntry("botpose_wpibred");
+
+    NetworkTableEntry                    tid                                  = table.getEntry("tid");
+
+    double[]                             aprilTagHeights                      = { 53.38, 53.38, 57.13, 57.13, 53.38, 53.38, 57.13,
+            57.13, 53.38, 53.38, 52, 52, 52, 52, 52, 52 };
+
+
 
     private VisionConstants.VisionTarget currentVisionTarget                  = VisionConstants.VisionTarget.NONE;
 
@@ -154,6 +171,9 @@ public class JackmanVisionSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Limelight LED mode", ledMode.getInteger(-1L));
         SmartDashboard.putNumber("Limelight Pipeline", pipeline.getInteger(-1L));
         SmartDashboard.putBoolean("Note Target Acquired", isNoteTargetAcquired());
+        SmartDashboard.putNumber("Distance to Tag", getDistanceToTag());
+        SmartDashboard.putNumber("AprilTag Height", getApriltagHeight());
+        SmartDashboard.putNumberArray("Botpose", getBotPose());
     }
 
     /**
@@ -185,6 +205,72 @@ public class JackmanVisionSubsystem extends SubsystemBase {
      */
     private double getTargetY() {
         return ty.getDouble(-1.0);
+    }
+
+    private double getApriltagHeight() {
+        int tagid = (int) tid.getInteger(-1);
+
+        if (tagid < 1 | tagid > 16) {
+            return -1;
+        }
+
+        return aprilTagHeights[tagid - 1];
+    }
+
+
+    public double getDistanceToTag() {
+        double targetOffsetAngle_Vertical        = ty.getDouble(0.0);
+        // how many degrees back is your limelight rotated from perfectly vertical?
+        double limelightMountAngleDegrees        = -0.7;
+        // distance from the center of the Limelight lens to the floor
+        double limelightLensHeightInches         = 7.72;
+        // distance from the target to the floor
+        double goalHeightInches                  = getApriltagHeight();
+        double angleToGoalDegrees                = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
+
+        double angleToGoalRadians                = angleToGoalDegrees * (3.14159 / 180.0);
+        // calculate distance
+        double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
+
+        return distanceFromLimelightToGoalInches;
+    }
+
+
+    public double[] getBotPose() {
+        // Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
+
+        // if (alliance.get().equals(DriverStation.Alliance.Red)) {
+        // return botpose_wpired.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0, 0, 0 });
+        // }
+        // else
+        return botpose_wpiblue.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0, 0, 0 });
+    }
+
+    // private static Pose3d toPose3D(double[] inData) {
+    // if (inData.length < 6) {
+    // System.err.println("Bad LL 3D Pose `Data!");
+    // return new Pose3d();
+    // }
+    // return new Pose3d(
+    // new Translation3d(inData[0], inData[1], inData[2]),
+    // new Rotation3d(Units.degreesToRadians(inData[3]), Units.degreesToRadians(inData[4]),
+    // Units.degreesToRadians(inData[5])));
+    // }
+
+    private static Pose2d toPose2D(double[] inData) {
+        if (inData.length < 6) {
+            System.err.println("Bad LL 2D Pose Data!");
+            return new Pose2d();
+        }
+        Translation2d tran2d = new Translation2d(inData[0], inData[1]);
+        Rotation2d    r2d    = new Rotation2d(Units.degreesToRadians(inData[5]));
+        return new Pose2d(tran2d, r2d);
+    }
+
+    public Pose2d getBotPose2d_wpiBlue() {
+
+        double[] result = getBotPose();
+        return toPose2D(result);
     }
 
 
