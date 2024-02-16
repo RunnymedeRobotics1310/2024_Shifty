@@ -1,11 +1,10 @@
 package frc.robot.commands.arm;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 
 // Move arm to amp shoot pose
 // Set shooter speed
-public class AimAmpCommand extends Command {
+public class AimAmpCommand extends ArmBaseCommand {
 
     private double aimSpeed;
     private double armSpeed;

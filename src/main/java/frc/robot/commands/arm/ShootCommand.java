@@ -1,12 +1,11 @@
 package frc.robot.commands.arm;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 
 // start feeder motor
 // wait
 //then stop feeder motor
-public class ShootCommand extends Command {
+public class ShootCommand extends ArmBaseCommand {
 
     private double aimSpeed;
     private double armSpeed;

@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 /**
  * The Logging Command Base implements command helpers to aid with logging and command timeout
  */
-public class LoggingCommand extends Command {
+public abstract class LoggingCommand extends Command {
 
     SimpleDateFormat START_TIMESTAMP_FMT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 

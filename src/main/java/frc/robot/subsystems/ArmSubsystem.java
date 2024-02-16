@@ -26,6 +26,11 @@ public class ArmSubsystem extends SubsystemBase {
         this.lightsSubsystem = lightsSubsystem;
     }
 
+    public double getAimAngle() {
+        // FIXME: Convert encoder to angle
+        return aimAngleEncoder;
+    }
+
     public void setArmSpeed(double speed) {
         armSpeed = speed;
     }
@@ -103,4 +108,5 @@ public class ArmSubsystem extends SubsystemBase {
 
         lightsSubsystem.setAimAngle(aimSpeedEncoder, shooterAtTargetSpeed);
     }
+
 }

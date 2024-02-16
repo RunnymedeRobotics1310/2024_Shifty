@@ -79,10 +79,17 @@ public final class Constants {
 
     public static final class ArmConstants {
 
-        ArmPosition INTAKE_ARM_POSITION        = new ArmPosition(20.0, 170.0);
-        ArmPosition SHOOT_SPEAKER_ARM_POSITION = new ArmPosition(115.0, 90.0);
-        ArmPosition SHOOT_AMP_ARM_POSITION     = new ArmPosition(125.0, 160.0);
-        ArmPosition COMPACT_ARM_POSITION       = new ArmPosition(100.0, 70.0);
-        ArmPosition TRAP_ARM_POSITION          = new ArmPosition(145.0, 165.0);
+        public static final ArmPosition INTAKE_ARM_POSITION        = new ArmPosition(20.0, 170.0);
+        public static final ArmPosition SHOOT_SPEAKER_ARM_POSITION = new ArmPosition(115.0, 90.0);
+        public static final ArmPosition SHOOT_AMP_ARM_POSITION     = new ArmPosition(125.0, 160.0);
+        public static final ArmPosition COMPACT_ARM_POSITION       = new ArmPosition(100.0, 70.0);
+        public static final ArmPosition TRAP_ARM_POSITION          = new ArmPosition(145.0, 165.0);
+
+        public static final double      FAST_AIM_SPEED             = .3;
+        public static final double      SLOW_AIM_SPEED             = .1;
+        public static final double      FAST_ARM_SPEED             = .3;
+        public static final double      SLOW_ARM_SPEED             = .1;
+
+        public static final double      SLOW_ARM_ZONE_DEG          = 20.0;
     }
 }
