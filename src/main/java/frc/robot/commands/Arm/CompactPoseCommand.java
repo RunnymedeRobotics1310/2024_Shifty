@@ -1,4 +1,4 @@
-package frc.robot.commands.Arm;
+package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
@@ -9,10 +9,10 @@ public class CompactPoseCommand extends Command {
 
     private double aimSpeed;
     private double armSpeed;
-    private double encoderAimSpeed;
-    private double encoderAimAngle;
-    private double encoderArmAngle;
-    private double encoderArmSpeed;
+    private double aimSpeedEncoder;
+    private double aimAngleEncoder;
+    private double armAngleEncoder;
+    private double armSpeedEncoder;
 
     public void CompactPoseCommand(ArmSubsystem armSubsystem) {
 
