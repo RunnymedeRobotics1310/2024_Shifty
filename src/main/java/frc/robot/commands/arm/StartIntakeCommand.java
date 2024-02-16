@@ -109,7 +109,7 @@ public class StartIntakeCommand extends ArmBaseCommand {
     @Override
     public void end(boolean interrupted) {
         armSubsystem.stop();
-        armSubsystem.setIntakeSpeed();
+        armSubsystem.setIntakeSpeed(ArmConstants.INTAKE_SPEED);
     }
 
     @Override
