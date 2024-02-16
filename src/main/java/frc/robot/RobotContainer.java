@@ -40,7 +40,7 @@ public class RobotContainer {
     private final JackmanVisionSubsystem visionSubsystem  = new JackmanVisionSubsystem();
     private final IntakeSubsystem        IntakeSubsystem  = new IntakeSubsystem(lightsSubsystem);
     private final ShooterSubsystem       ShooterSubsystem = new ShooterSubsystem(lightsSubsystem);
-    private final ArmSubsystem           ArmSubsystem     = new ArmSubsystem(lightsSubsystem);
+    private final ArmSubsystem           armSubsystem     = new ArmSubsystem(lightsSubsystem);
 
 
 

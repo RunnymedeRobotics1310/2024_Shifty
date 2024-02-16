@@ -13,12 +13,12 @@ public class ArmSubsystem extends SubsystemBase {
     private double                intakeSpeed         = 0;
     private double                shooterSpeed        = 0;
 
-    private double                encoderArmSpeed     = 0;
-    private double                encoderAimSpeed     = 0;
-    private double                encoderIntakeSpeed  = 0;
-    private double                encoderShooterSpeed = 0;
-    private double                encoderArmAngle     = 0;
-    private double                encoderAimAngle     = 0;
+    private double                armSpeedEncoder     = 0;
+    private double                aimSpeedEncoder     = 0;
+    private double                intakeSpeedEncoder  = 0;
+    private double                shooterSpeedEncoder = 0;
+    private double                armAngleEncoder     = 0;
+    private double                aimAngleEncoder     = 0;
 
     private DigitalInput          noteDetector        = new DigitalInput(1);
 
@@ -47,10 +47,10 @@ public class ArmSubsystem extends SubsystemBase {
         setAimSpeed(0);
         setIntakeSpeed(0);
         setShooterSpeed(0);
-        encoderArmSpeed     = 0;
-        encoderAimSpeed     = 0;
-        encoderIntakeSpeed  = 0;
-        encoderShooterSpeed = 0;
+        armSpeedEncoder     = 0;
+        aimSpeedEncoder     = 0;
+        intakeSpeedEncoder  = 0;
+        shooterSpeedEncoder = 0;
     }
 
     public boolean isGamepieceDetected() {
@@ -61,46 +61,46 @@ public class ArmSubsystem extends SubsystemBase {
     public void periodic() {
 
         SmartDashboard.putNumber("Intake Speed", intakeSpeed);
-        SmartDashboard.putNumber("Encoder Intake Speed", encoderIntakeSpeed);
+        SmartDashboard.putNumber("Encoder Intake Speed", intakeSpeedEncoder);
 
         SmartDashboard.putNumber("Shooter Speed", shooterSpeed);
-        SmartDashboard.putNumber("Encoder Shooter Speed", encoderShooterSpeed);
+        SmartDashboard.putNumber("Encoder Shooter Speed", shooterSpeedEncoder);
 
         SmartDashboard.putNumber("Arm Speed", armSpeed);
-        SmartDashboard.putNumber("Encoder Arm Speed", encoderArmSpeed);
-        SmartDashboard.putNumber("Arm Angle", encoderArmAngle);
+        SmartDashboard.putNumber("Encoder Arm Speed", armSpeedEncoder);
+        SmartDashboard.putNumber("Arm Angle", armAngleEncoder);
 
         SmartDashboard.putNumber("Aim Speed", aimSpeed);
-        SmartDashboard.putNumber("Encoder Aim Speed", encoderAimSpeed);
-        SmartDashboard.putNumber("Aim Angle", encoderAimAngle);
+        SmartDashboard.putNumber("Encoder Aim Speed", aimSpeedEncoder);
+        SmartDashboard.putNumber("Aim Angle", aimAngleEncoder);
 
         SmartDashboard.putBoolean("Is Gamepiece Detected", isGamepieceDetected());
 
-        if (intakeSpeed > encoderIntakeSpeed) {
-            encoderIntakeSpeed += .002;
+        if (intakeSpeed > intakeSpeedEncoder) {
+            intakeSpeedEncoder += .002;
         }
         else {
-            encoderIntakeSpeed -= .002;
+            intakeSpeedEncoder -= .002;
         }
 
-        boolean intakeAtTargetSpeed = Math.abs(shooterSpeed - encoderIntakeSpeed) < .05;
+        boolean intakeAtTargetSpeed = Math.abs(shooterSpeed - intakeSpeedEncoder) < .05;
 
-        lightsSubsystem.setIntakeSpeed(encoderIntakeSpeed, intakeAtTargetSpeed);
+        lightsSubsystem.setIntakeSpeed(intakeSpeedEncoder, intakeAtTargetSpeed);
 
 
-        if (shooterSpeed > encoderShooterSpeed) {
-            encoderShooterSpeed += .002;
+        if (shooterSpeed > shooterSpeedEncoder) {
+            shooterSpeedEncoder += .002;
         }
         else {
-            encoderShooterSpeed -= .002;
+            shooterSpeedEncoder -= .002;
         }
 
-        boolean shooterAtTargetSpeed = Math.abs(shooterSpeed - encoderShooterSpeed) < .05;
+        boolean shooterAtTargetSpeed = Math.abs(shooterSpeed - shooterSpeedEncoder) < .05;
 
-        lightsSubsystem.setShooterSpeed(encoderShooterSpeed, shooterAtTargetSpeed);
+        lightsSubsystem.setShooterSpeed(shooterSpeedEncoder, shooterAtTargetSpeed);
 
-        lightsSubsystem.setArmAngle(encoderArmSpeed, shooterAtTargetSpeed);
+        lightsSubsystem.setArmAngle(armSpeedEncoder, shooterAtTargetSpeed);
 
-        lightsSubsystem.setAimAngle(encoderAimSpeed, shooterAtTargetSpeed);
+        lightsSubsystem.setAimAngle(aimSpeedEncoder, shooterAtTargetSpeed);
     }
 }

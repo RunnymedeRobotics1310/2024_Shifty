@@ -3,13 +3,22 @@ package frc.robot.commands.SemiAuto;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 
-// Start Intake
-// Align with Note
+//Align with note
+//set motor speeds
+//move Aim/Arm
+//drive
+//check for intake
+//stop motors
+//move arm to default pose
+//move arm to compact
 public class AutoFloorIntakeCommand extends Command {
 
     private double aimSpeed;
+    private double armSpeed;
     private double encoderAimSpeed;
     private double encoderAimAngle;
+    private double encoderArmAngle;
+    private double encoderArmSpeed;
 
 
     public void StartIntakeCommand(ArmSubsystem armSubsystem) {
@@ -24,8 +33,7 @@ public class AutoFloorIntakeCommand extends Command {
 
     @Override
     public void execute() {
-        // Set intake speed
-        // line up with note
+
     }
 
     @Override
