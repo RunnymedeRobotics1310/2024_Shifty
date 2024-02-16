@@ -8,8 +8,11 @@ import frc.robot.subsystems.ArmSubsystem;
 public class StartIntakeCommand extends Command {
 
     private double aimSpeed;
+    private double armSpeed;
     private double encoderAimSpeed;
     private double encoderAimAngle;
+    private double encoderArmAngle;
+    private double encoderArmSpeed;
 
 
     public void StartIntakeCommand(ArmSubsystem armSubsystem) {
@@ -35,6 +38,6 @@ public class StartIntakeCommand extends Command {
 
     @Override
     public boolean isFinished() {
-
+        return true;
     }
 }

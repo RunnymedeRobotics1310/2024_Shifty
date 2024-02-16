@@ -9,8 +9,11 @@ import frc.robot.subsystems.ArmSubsystem;
 public class ShootCommand extends Command {
 
     private double aimSpeed;
+    private double armSpeed;
     private double encoderAimSpeed;
     private double encoderAimAngle;
+    private double encoderArmAngle;
+    private double encoderArmSpeed;
 
 
     public void ShootCommand(ArmSubsystem armSubsystem) {
@@ -37,6 +40,6 @@ public class ShootCommand extends Command {
 
     @Override
     public boolean isFinished() {
-
+        return true;
     }
 }

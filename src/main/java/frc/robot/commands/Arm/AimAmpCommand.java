@@ -8,10 +8,11 @@ import frc.robot.subsystems.ArmSubsystem;
 public class AimAmpCommand extends Command {
 
     private double aimSpeed;
-    private double shooterSpeed;
+    private double armSpeed;
     private double encoderAimSpeed;
     private double encoderAimAngle;
-    private double encoderShooterSpeed;
+    private double encoderArmAngle;
+    private double encoderArmSpeed;
 
 
     public void AimAmpCommand(ArmSubsystem armSubsystem) {
@@ -37,7 +38,7 @@ public class AimAmpCommand extends Command {
 
     @Override
     public boolean isFinished() {
-
+        return true;
     }
 
 }

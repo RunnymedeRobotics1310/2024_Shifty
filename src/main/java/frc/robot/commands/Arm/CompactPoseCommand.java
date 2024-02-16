@@ -8,9 +8,11 @@ import frc.robot.subsystems.ArmSubsystem;
 public class CompactPoseCommand extends Command {
 
     private double aimSpeed;
+    private double armSpeed;
     private double encoderAimSpeed;
     private double encoderAimAngle;
-
+    private double encoderArmAngle;
+    private double encoderArmSpeed;
 
     public void CompactPoseCommand(ArmSubsystem armSubsystem) {
 
@@ -35,6 +37,6 @@ public class CompactPoseCommand extends Command {
 
     @Override
     public boolean isFinished() {
-
+        return true;
     }
 }
