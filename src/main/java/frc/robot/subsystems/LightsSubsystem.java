@@ -111,37 +111,14 @@ public class LightsSubsystem extends SubsystemBase {
         ledBuffer.setLED(1, color);
     }
 
-    public void setArmAngle(double ArmAngle, boolean armAtTargetAngle) {
+    public void setArmAngle(double ArmAngle) {
 
-        Color color = new Color(0, 0, 0);
-
-        if (ArmAngle > 0) {
-
-            color = new Color(0, 255, 0);
-
-            if (!armAtTargetAngle) {
-                color = new Color(255, 0, 0);
-            }
-        }
-
-        ledBuffer.setLED(2, color);
     }
 
-    public void setAimAngle(double AimAngle, boolean aimAtTargetAngle) {
+    public void setAimAngle(double ArmAngle) {
 
-        Color color = new Color(0, 0, 0);
-
-        if (AimAngle > 0) {
-
-            color = new Color(0, 255, 0);
-
-            if (!aimAtTargetAngle) {
-                color = new Color(255, 0, 0);
-            }
-        }
-
-        ledBuffer.setLED(3, color);
     }
+
 
     public void setGamepieceDetected(boolean gamepieceDetected) {
 
