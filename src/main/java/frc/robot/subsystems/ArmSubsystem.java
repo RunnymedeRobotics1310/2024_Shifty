@@ -35,7 +35,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public double getArmAngle() {
-        return aimAngleEncoder;
+        return armAngleEncoder;
     }
 
     public void setArmSpeed(double speed) {
