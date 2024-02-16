@@ -79,7 +79,10 @@ public final class Constants {
 
     public static final class ArmConstants {
 
-        ArmPosition INTAKE_ARM_POSITION = new ArmPosition(20.0, 170.0);
-
+        ArmPosition INTAKE_ARM_POSITION        = new ArmPosition(20.0, 170.0);
+        ArmPosition SHOOT_SPEAKER_ARM_POSITION = new ArmPosition(115.0, 90.0);
+        ArmPosition SHOOT_AMP_ARM_POSITION     = new ArmPosition(125.0, 160.0);
+        ArmPosition COMPACT_ARM_POSITION       = new ArmPosition(100.0, 70.0);
+        ArmPosition TRAP_ARM_POSITION          = new ArmPosition(145.0, 165.0);
     }
 }
