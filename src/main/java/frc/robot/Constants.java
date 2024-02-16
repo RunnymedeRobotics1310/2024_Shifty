@@ -51,8 +51,6 @@ public final class Constants {
             // Assumes the encoders are directly mounted on the wheel shafts
             (ROBOT_WHEEL_DIAMETER_CMS * Math.PI) / ENCODER_COUNTS_PER_REVOLUTION;
 
-        public static final int     ANALOG_GYRO_PORT              = 0;
-
         public static final int     SHIFTER_PNEUMATIC_PORT        = 0;
     }
 
@@ -66,5 +64,22 @@ public final class Constants {
 
         public static final int LIGHT_STRING_PWM_PORT = 9;
         public static final int LIGHT_STRING_LENGTH   = 30;
+    }
+
+    public static class ArmPosition {
+
+        public final double armAngle;
+        public final double aimAngle;
+
+        public ArmPosition(double armAngle, double aimAngle) {
+            this.armAngle = armAngle;
+            this.aimAngle = aimAngle;
+        }
+    }
+
+    public static final class ArmConstants {
+
+        ArmPosition INTAKE_ARM_POSITION = new ArmPosition(20.0, 170.0);
+
     }
 }
