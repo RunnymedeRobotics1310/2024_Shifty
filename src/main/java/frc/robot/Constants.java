@@ -63,7 +63,7 @@ public final class Constants {
     public static final class LightsConstants {
 
         public static final int LIGHT_STRING_PWM_PORT = 9;
-        public static final int LIGHT_STRING_LENGTH   = 30;
+        public static final int LIGHT_STRING_LENGTH   = 60;
     }
 
     public static class ArmPosition {

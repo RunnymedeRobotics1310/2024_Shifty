@@ -5,13 +5,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
+import frc.robot.commands.arm.StartIntakeCommand;
 import frc.robot.commands.drive.DriveToTargetCommand;
-import frc.robot.commands.shooter.IntakeCommand;
 import frc.robot.commands.shooter.ShootCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.JackmanVisionSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 
 /**
  * The Operator input class is used to map buttons to functions and functions to commands
@@ -58,17 +57,17 @@ public class OperatorInput extends SubsystemBase {
      *
      * NOTE: all subsystems should be passed into this method.
      */
-    public void configureButtonBindings(DriveSubsystem driveSubsystem, ShooterSubsystem shooterSubsystem,
-        IntakeSubsystem intakeSubsystem, JackmanVisionSubsystem visionSubsystem) {
+    public void configureButtonBindings(DriveSubsystem driveSubsystem, ArmSubsystem armSubsystem,
+        JackmanVisionSubsystem visionSubsystem) {
 
         new Trigger(() -> isCancel())
             .onTrue(new CancelCommand(this, driveSubsystem));
 
         new Trigger(() -> isShoot())
-            .onTrue(new ShootCommand(intakeSubsystem, shooterSubsystem));
+            .onTrue(new ShootCommand(armSubsystem));
 
         new Trigger(() -> isIntake())
-            .onTrue(new IntakeCommand(intakeSubsystem));
+            .onTrue(new StartIntakeCommand(armSubsystem));
 
         new Trigger(this::isDriveToTarget)
             .onTrue(new DriveToTargetCommand(1, 0.2, driveSubsystem, visionSubsystem));

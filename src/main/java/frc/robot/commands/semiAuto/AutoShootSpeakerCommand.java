@@ -1,10 +1,9 @@
-package frc.robot.commands.SemiAuto;
+package frc.robot.commands.semiAuto;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 
-
-public class AutoShootAmpCommand extends Command {
+public class AutoShootSpeakerCommand extends Command {
 
     private double aimSpeed;
     private double armSpeed;
@@ -14,10 +13,10 @@ public class AutoShootAmpCommand extends Command {
     private double encoderArmSpeed;
 
 
-    public void AutoShootAmpCommand(ArmSubsystem armSubsystem) {
+    public void AutoShootSpeakerCommand(ArmSubsystem armSubsystem) {
         // Steps:
         // Start Shooter
-        // Align with Amp
+        // Align with Speaker
         // Aim
         // Shoot
         // Close arm

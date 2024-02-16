@@ -1,17 +1,11 @@
-package frc.robot.commands.SemiAuto;
+package frc.robot.commands.semiAuto;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 
-//Align with note
-//set motor speeds
-//move Aim/Arm
-//drive
-//check for intake
-//stop motors
-//move arm to default pose
-//move arm to compact
-public class AutoFloorIntakeCommand extends Command {
+//adjust arm
+//adjust aim based on vision
+public class AutoSetShooterPoseSpeakerCommand extends Command {
 
     private double aimSpeed;
     private double armSpeed;
@@ -21,7 +15,7 @@ public class AutoFloorIntakeCommand extends Command {
     private double encoderArmSpeed;
 
 
-    public void StartIntakeCommand(ArmSubsystem armSubsystem) {
+    public void AutoSetShooterPoseSpeaker(ArmSubsystem armSubsystem) {
 
         addRequirements(armSubsystem);
     }

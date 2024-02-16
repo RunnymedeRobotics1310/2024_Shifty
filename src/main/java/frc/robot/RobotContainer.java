@@ -17,10 +17,8 @@ import frc.robot.commands.drive.DefaultDriveCommand;
 import frc.robot.operator.OperatorInput;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.JackmanVisionSubsystem;
 import frc.robot.subsystems.LightsSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -32,15 +30,13 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class RobotContainer {
 
     // The operator input class
-    private final OperatorInput          operatorInput    = new OperatorInput();
+    private final OperatorInput          operatorInput   = new OperatorInput();
 
     // The robot's subsystems and commands are defined here...
-    private final DriveSubsystem         driveSubsystem   = new DriveSubsystem();
-    private final LightsSubsystem        lightsSubsystem  = new LightsSubsystem();
-    private final JackmanVisionSubsystem visionSubsystem  = new JackmanVisionSubsystem();
-    private final IntakeSubsystem        IntakeSubsystem  = new IntakeSubsystem(lightsSubsystem);
-    private final ShooterSubsystem       ShooterSubsystem = new ShooterSubsystem(lightsSubsystem);
-    private final ArmSubsystem           armSubsystem     = new ArmSubsystem(lightsSubsystem);
+    private final DriveSubsystem         driveSubsystem  = new DriveSubsystem();
+    private final LightsSubsystem        lightsSubsystem = new LightsSubsystem();
+    private final JackmanVisionSubsystem visionSubsystem = new JackmanVisionSubsystem();
+    private final ArmSubsystem           armSubsystem    = new ArmSubsystem(lightsSubsystem);
 
 
 
@@ -63,7 +59,7 @@ public class RobotContainer {
         initDashboardChoosers();
 
         // Configure the button bindings
-        operatorInput.configureButtonBindings(driveSubsystem, ShooterSubsystem, IntakeSubsystem, visionSubsystem);
+        operatorInput.configureButtonBindings(driveSubsystem, armSubsystem, visionSubsystem);
 
         // Add a trigger for the robot enabled
         new Trigger(() -> RobotController.isSysActive())
