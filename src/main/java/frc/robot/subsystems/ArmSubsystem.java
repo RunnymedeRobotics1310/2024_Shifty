@@ -38,11 +38,6 @@ public class ArmSubsystem extends SubsystemBase {
         return aimAngleEncoder;
     }
 
-    public double getArmAngle() {
-        // FIXME: Convert encoder to angle
-        return armAngleEncoder;
-    }
-
     public void setArmSpeed(double speed) {
         this.armSpeed = speed;
     }
