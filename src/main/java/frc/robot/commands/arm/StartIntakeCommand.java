@@ -60,7 +60,7 @@ public class StartIntakeCommand extends ArmBaseCommand {
             // same rate.
 
             double aimSpeed = ArmConstants.FAST_AIM_SPEED;
-            double armSpeed = ArmConstants.FAST_ARM_SPEED;
+
 
             if (Math.abs(targetArmPosition.aimAngle - armSubsystem.getAimAngle()) < ArmConstants.SLOW_ARM_ZONE_DEG) {
                 aimSpeed = ArmConstants.SLOW_AIM_SPEED;
@@ -79,7 +79,7 @@ public class StartIntakeCommand extends ArmBaseCommand {
             /*
              * Set Aim
              */
-            armSubsystem.setArmSpeed(ArmConstants.FAST_ARM_SPEED);
+            double armSpeed = ArmConstants.FAST_ARM_SPEED;
 
 
             if (Math.abs(targetArmPosition.armAngle - armSubsystem.getArmAngle()) < ArmConstants.SLOW_ARM_ZONE_DEG) {
@@ -95,12 +95,6 @@ public class StartIntakeCommand extends ArmBaseCommand {
             }
 
             armSubsystem.setArmSpeed(armSpeed);
-
-            /*
-             * Set Aim
-             */
-            armSubsystem.setArmSpeed(ArmConstants.FAST_ARM_SPEED);
-
 
             break;
         }

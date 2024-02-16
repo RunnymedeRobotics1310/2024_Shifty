@@ -91,7 +91,7 @@ public final class Constants {
         public static final double      SLOW_ARM_SPEED             = .1;
 
         public static final double      SLOW_ARM_ZONE_DEG          = 20.0;
-        public static final double      AT_TARGET_DEG              = 0;
+        public static final double      AT_TARGET_DEG              = 1;
 
         public static final double      INTAKE_SPEED               = 1;
         public static final double      SHOOTER_SPEED              = 1;
