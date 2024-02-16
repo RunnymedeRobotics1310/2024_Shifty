@@ -15,7 +15,7 @@ public class ShootCommand extends ArmBaseCommand {
     private double armSpeedEncoder;
 
 
-    public void ShootCommand(ArmSubsystem armSubsystem) {
+    public ShootCommand(ArmSubsystem armSubsystem) {
 
         addRequirements(armSubsystem);
     }

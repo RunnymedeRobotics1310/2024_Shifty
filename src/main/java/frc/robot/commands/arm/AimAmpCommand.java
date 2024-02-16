@@ -14,7 +14,7 @@ public class AimAmpCommand extends ArmBaseCommand {
     private double armSpeedEncoder;
 
 
-    public void AimAmpCommand(ArmSubsystem armSubsystem) {
+    public AimAmpCommand(ArmSubsystem armSubsystem) {
 
         addRequirements(armSubsystem);
     }

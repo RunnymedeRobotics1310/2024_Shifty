@@ -13,7 +13,7 @@ public class CompactPoseCommand extends ArmBaseCommand {
     private double armAngleEncoder;
     private double armSpeedEncoder;
 
-    public void CompactPoseCommand(ArmSubsystem armSubsystem) {
+    public CompactPoseCommand(ArmSubsystem armSubsystem) {
 
         addRequirements(armSubsystem);
     }

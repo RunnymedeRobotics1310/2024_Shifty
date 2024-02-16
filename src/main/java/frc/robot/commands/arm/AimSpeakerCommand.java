@@ -14,7 +14,7 @@ public class AimSpeakerCommand extends ArmBaseCommand {
     private double armSpeedEncoder;
 
 
-    public void AimSpeakerCommand(ArmSubsystem armSubsystem) {
+    public AimSpeakerCommand(ArmSubsystem armSubsystem) {
 
         addRequirements(armSubsystem);
     }
