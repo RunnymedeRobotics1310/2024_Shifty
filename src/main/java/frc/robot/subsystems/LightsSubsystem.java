@@ -111,8 +111,17 @@ public class LightsSubsystem extends SubsystemBase {
         ledBuffer.setLED(1, color);
     }
 
-    public void setArmAngle(double ArmAngle) {
+    public void setArmAngle(double armAngle) {
 
+        // Use led 30 colour to indicate the position
+        // Use the range 31-44 for the arm angle.
+        int led = Math.min(13, Math.max(0, ((int) (armAngle - 4.5) / 9))) + 31;
+
+        for (int i = 31; i < 45; i++) {
+            ledBuffer.setLED(i, Color.kBlack);
+        }
+
+        ledBuffer.setLED(led, Color.kGreen);
     }
 
     public void setAimAngle(double ArmAngle) {

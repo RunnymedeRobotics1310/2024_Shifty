@@ -38,6 +38,10 @@ public class ArmSubsystem extends SubsystemBase {
         return armAngleEncoder;
     }
 
+    public boolean isGamepieceDetected() {
+        return !noteDetector.get();
+    }
+
     public void setArmSpeed(double speed) {
         this.armSpeed = speed;
     }
@@ -63,10 +67,6 @@ public class ArmSubsystem extends SubsystemBase {
         shooterSpeedEncoder = 0;
     }
 
-    public boolean isGamepieceDetected() {
-        return !noteDetector.get();
-    }
-
     @Override
     public void periodic() {
 
@@ -86,7 +86,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         // Move the aim and arm angles based on the speed.
         aimAngleEncoder += aimSpeed;
-        armAngleEncoder += armSpeed;
+        armAngleEncoder  = Math.min(130, Math.max(0, armAngleEncoder + armSpeed));
 
         if (intakeSpeed > intakeSpeedEncoder) {
             intakeSpeedEncoder += .002;
@@ -119,6 +119,8 @@ public class ArmSubsystem extends SubsystemBase {
         lightsSubsystem.setArmAngle(getArmAngle());
 
         lightsSubsystem.setAimAngle(getAimAngle());
+
+        lightsSubsystem.setGamepieceDetected(isGamepieceDetected());
     }
 
 }
