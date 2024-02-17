@@ -44,13 +44,14 @@ public class OperatorInput extends SubsystemBase {
         return driverController.getYButton();
     }
 
-    public boolean isIntake() {
+    public boolean isStartIntakePressed() {
         return driverController.getAButton();
     }
 
-    public boolean isDriveToTarget() {
+    public boolean isCompactPressed() {
         return driverController.getXButton();
     }
+
 
     /**
      * Use this method to define your robotFunction -> command mappings.
@@ -66,10 +67,10 @@ public class OperatorInput extends SubsystemBase {
         new Trigger(() -> isShoot())
             .onTrue(new ShootCommand(armSubsystem));
 
-        new Trigger(() -> isIntake())
+        new Trigger(() -> isStartIntakePressed())
             .onTrue(new StartIntakeCommand(armSubsystem));
 
-        new Trigger(this::isDriveToTarget)
+        new Trigger(() -> isCompactPressed())
             .onTrue(new DriveToTargetCommand(1, 0.2, driveSubsystem, visionSubsystem));
     }
 

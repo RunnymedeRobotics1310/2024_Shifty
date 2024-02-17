@@ -123,4 +123,15 @@ public class DriveSubsystem extends SubsystemBase {
         // error = desiredValue (setpoint) - actualValue (measurement)
     }
 
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(this.getClass().getSimpleName()).append(" : ")
+            .append("[").append(leftSpeed).append(", ").append(rightSpeed).append("] ")
+            .append(getHeading()).append(" deg");
+
+        return sb.toString();
+    }
 }

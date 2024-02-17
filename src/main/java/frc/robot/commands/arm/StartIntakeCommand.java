@@ -103,7 +103,11 @@ public class StartIntakeCommand extends ArmBaseCommand {
     @Override
     public void end(boolean interrupted) {
         armSubsystem.stop();
+
+        // Start the intake
         armSubsystem.setIntakeSpeed(ArmConstants.INTAKE_SPEED);
+
+        logCommandEnd(interrupted);
     }
 
     @Override
@@ -112,6 +116,7 @@ public class StartIntakeCommand extends ArmBaseCommand {
         if (Math.abs(targetArmPosition.aimAngle - armSubsystem.getAimAngle()) < ArmConstants.AT_TARGET_DEG
             && Math.abs(targetArmPosition.armAngle - armSubsystem.getArmAngle()) < ArmConstants.AT_TARGET_DEG) {
 
+            setFinishReason("Arm at Intake position");
             return true;
         }
 
