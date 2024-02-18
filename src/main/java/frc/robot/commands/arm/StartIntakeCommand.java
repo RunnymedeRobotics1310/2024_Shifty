@@ -1,5 +1,6 @@
 package frc.robot.commands.arm;
 
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ArmPosition;
 import frc.robot.subsystems.ArmSubsystem;
@@ -27,6 +28,12 @@ public class StartIntakeCommand extends ArmBaseCommand {
     @Override
     public void initialize() {
 
+        // If there is a note inside the robot, then do not start this command
+        if (armSubsystem.isNoteDetected()) {
+            System.out.println("Note detected in robot.  StartIntakeCommand cancelled");
+            return;
+        }
+
         logCommandStart();
 
         if (armSubsystem.getAimAngle() < 90) {
@@ -35,10 +42,18 @@ public class StartIntakeCommand extends ArmBaseCommand {
         else {
             state = State.MOVE_TO_TARGET;
         }
+
+        // Start the intake wheels
+        armSubsystem.setIntakeSpeed(ArmConstants.INTAKE_SPEED);
     }
 
     @Override
     public void execute() {
+
+        // If there is a note detected, then there is nothing to do
+        if (armSubsystem.isNoteDetected()) {
+            return;
+        }
 
         switch (state) {
 
@@ -101,25 +116,25 @@ public class StartIntakeCommand extends ArmBaseCommand {
     }
 
     @Override
-    public void end(boolean interrupted) {
-        armSubsystem.stop();
-
-        // Start the intake
-        armSubsystem.setIntakeSpeed(ArmConstants.INTAKE_SPEED);
-
-        logCommandEnd(interrupted);
-    }
-
-    @Override
     public boolean isFinished() {
 
-        if (Math.abs(targetArmPosition.aimAngle - armSubsystem.getAimAngle()) < ArmConstants.AT_TARGET_DEG
-            && Math.abs(targetArmPosition.armAngle - armSubsystem.getArmAngle()) < ArmConstants.AT_TARGET_DEG) {
-
-            setFinishReason("Arm at Intake position");
+        // If there is a note detected, then this command ends
+        if (armSubsystem.isNoteDetected()) {
+            setFinishReason("Note detected");
             return true;
         }
 
         return false;
     }
+
+    @Override
+    public void end(boolean interrupted) {
+
+        armSubsystem.stop();
+
+        logCommandEnd(interrupted);
+
+        CommandScheduler.getInstance().schedule(new CompactPoseCommand(armSubsystem));
+    }
+
 }

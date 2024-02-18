@@ -38,7 +38,7 @@ public class ArmSubsystem extends SubsystemBase {
         return armAngleEncoder;
     }
 
-    public boolean isGamepieceDetected() {
+    public boolean isNoteDetected() {
         return !noteDetector.get();
     }
 
@@ -70,6 +70,36 @@ public class ArmSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
+        // TODO REMOVE this code when the real robot is available
+
+        // Fake some momentum in the motors by having them
+        // slowly ramp towards the set speed. In reality,
+        // this will happen much faster.
+        if (intakeSpeed > intakeSpeedEncoder) {
+            intakeSpeedEncoder += .002;
+        }
+        else if (intakeSpeed < intakeSpeedEncoder) {
+            intakeSpeedEncoder -= .002;
+        }
+
+        if (shooterSpeed > shooterSpeedEncoder) {
+            shooterSpeedEncoder += .002;
+        }
+        else if (shooterSpeed < shooterSpeedEncoder) {
+            shooterSpeedEncoder -= .002;
+        }
+
+        // Move the aim and arm angles based on the speed.
+        aimAngleEncoder = Math.min(130, Math.max(0, aimAngleEncoder + aimSpeed));
+        armAngleEncoder = Math.min(130, Math.max(0, armAngleEncoder + armSpeed));
+
+        // END TODO Code removal
+
+
+        /*
+         * Update the SmartDashboard
+         */
+
         SmartDashboard.putNumber("Intake Speed", intakeSpeed);
         SmartDashboard.putNumber("Encoder Intake Speed", intakeSpeedEncoder);
 
@@ -82,28 +112,25 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Aim Speed", aimSpeed);
         SmartDashboard.putNumber("Aim Angle", getAimAngle());
 
-        SmartDashboard.putBoolean("Is Gamepiece Detected", isGamepieceDetected());
+        SmartDashboard.putBoolean("Is Gamepiece Detected", isNoteDetected());
 
-        // Move the aim and arm angles based on the speed.
-        aimAngleEncoder += aimSpeed;
-        armAngleEncoder  = Math.min(130, Math.max(0, armAngleEncoder + armSpeed));
-
-        if (intakeSpeed > intakeSpeedEncoder) {
-            intakeSpeedEncoder += .002;
-        }
-        else {
-            intakeSpeedEncoder -= .002;
-        }
-
-        if (shooterSpeed > shooterSpeedEncoder) {
-            shooterSpeedEncoder += .002;
-        }
-        else {
-            shooterSpeedEncoder -= .002;
-        }
-
-
+        // Update the lights
         updateLights();
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(this.getClass().getSimpleName()).append(" : ")
+            .append("Arm ").append(getArmAngle()).append("deg (").append(armSpeed).append(") ")
+            .append("Aim ").append(getAimAngle()).append("deg (").append(aimSpeed).append(") ")
+            .append("Intake ").append(intakeSpeed).append(", ").append(intakeSpeedEncoder).append(' ')
+            .append("Shooter ").append(shooterSpeed).append(", ").append(shooterSpeedEncoder).append(' ')
+            .append("Game Piece ").append(isNoteDetected());
+
+        return sb.toString();
     }
 
     private void updateLights() {
@@ -120,7 +147,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         lightsSubsystem.setAimAngle(getAimAngle());
 
-        lightsSubsystem.setGamepieceDetected(isGamepieceDetected());
+        lightsSubsystem.setGamepieceDetected(isNoteDetected());
     }
 
 }
