@@ -67,15 +67,15 @@ public class LightsSubsystem extends SubsystemBase {
     /*
      * Arm LED routines
      */
-    public void setArmAngle(double armAngle) {
+    public void setLinkAngle(double linkAngle) {
 
         // TODO Use led 30 colour to indicate the position
 
-        // Use the range 31-44 for the arm angle.
+        // Use the range 31-44 for the link angle.
         // Determine the LED to light
         // There are 14 leds spanning the range 0-130 deg ~ 9deg/led;
         //
-        int led = (int) Math.round(armAngle / 9);
+        int led = (int) Math.round(linkAngle / 9);
 
         // Limit the LED to the range 0-13
         led = Math.min(13, led);
@@ -143,9 +143,9 @@ public class LightsSubsystem extends SubsystemBase {
         ledBuffer.setLED(0, color);
     }
 
-    public void setGamepieceDetected(boolean gamepieceDetected) {
+    public void setNoteHeld(boolean noteHeld) {
 
-        if (gamepieceDetected) {
+        if (noteHeld) {
             ledBuffer.setLED(2, new Color(255, 20, 0));
         }
         else {

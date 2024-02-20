@@ -68,27 +68,29 @@ public final class Constants {
 
     public static class ArmPosition {
 
-        public final double armAngle;
+        public final double linkAngle;
         public final double aimAngle;
 
         public ArmPosition(double armAngle, double aimAngle) {
-            this.armAngle = armAngle;
-            this.aimAngle = aimAngle;
+            this.linkAngle = armAngle;
+            this.aimAngle  = aimAngle;
         }
     }
 
     public static final class ArmConstants {
 
-        public static final ArmPosition INTAKE_ARM_POSITION        = new ArmPosition(20.0, 170.0);
+        public static final ArmPosition COMPACT_ARM_POSITION       = new ArmPosition(100.0, 75.0);
+        public static final ArmPosition OVER_BUMPER_POSITION       = new ArmPosition(60.0, 125.0);
+        public static final ArmPosition INTAKE_ARM_POSITION        = new ArmPosition(20.0, 160.0);
+
         public static final ArmPosition SHOOT_SPEAKER_ARM_POSITION = new ArmPosition(115.0, 90.0);
         public static final ArmPosition SHOOT_AMP_ARM_POSITION     = new ArmPosition(125.0, 160.0);
-        public static final ArmPosition COMPACT_ARM_POSITION       = new ArmPosition(100.0, 70.0);
         public static final ArmPosition TRAP_ARM_POSITION          = new ArmPosition(145.0, 165.0);
 
         public static final double      FAST_AIM_SPEED             = .3;
         public static final double      SLOW_AIM_SPEED             = .1;
-        public static final double      FAST_ARM_SPEED             = .3;
-        public static final double      SLOW_ARM_SPEED             = .1;
+        public static final double      FAST_LINK_SPEED            = .3;
+        public static final double      SLOW_LINK_SPEED            = .1;
 
         public static final double      SLOW_ARM_ZONE_DEG          = 20.0;
         public static final double      AT_TARGET_DEG              = 1;

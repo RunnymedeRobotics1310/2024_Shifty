@@ -2,7 +2,6 @@ package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.ArmPosition;
 import frc.robot.subsystems.ArmSubsystem;
 
 // Start Intake
@@ -10,11 +9,10 @@ import frc.robot.subsystems.ArmSubsystem;
 public class StartIntakeCommand extends ArmBaseCommand {
 
     private enum State {
-        MOVE_AIM_ABOVE_90, MOVE_TO_TARGET
+        MOVE_AIM_ABOVE_90, MOVE_TO_OVER_BUMPER, MOVE_TO_INTAKE
     };
 
-    private State              state             = State.MOVE_AIM_ABOVE_90;
-    private ArmPosition        targetArmPosition = ArmConstants.INTAKE_ARM_POSITION;
+    private State              state = State.MOVE_AIM_ABOVE_90;
 
     private final ArmSubsystem armSubsystem;
 
@@ -30,7 +28,7 @@ public class StartIntakeCommand extends ArmBaseCommand {
 
         // If there is a note inside the robot, then do not start this command
         if (armSubsystem.isNoteDetected()) {
-            System.out.println("Note detected in robot.  StartIntakeCommand cancelled");
+            System.out.println("Note detected in robot. StartIntakeCommand cancelled");
             return;
         }
 
@@ -39,8 +37,11 @@ public class StartIntakeCommand extends ArmBaseCommand {
         if (armSubsystem.getAimAngle() < 90) {
             state = State.MOVE_AIM_ABOVE_90;
         }
+        else if (armSubsystem.getAimAngle() < ArmConstants.OVER_BUMPER_POSITION.aimAngle) {
+            state = State.MOVE_TO_OVER_BUMPER;
+        }
         else {
-            state = State.MOVE_TO_TARGET;
+            state = State.MOVE_TO_INTAKE;
         }
 
         // Start the intake wheels
@@ -55,63 +56,139 @@ public class StartIntakeCommand extends ArmBaseCommand {
             return;
         }
 
+        // Get the current angles
+        double currentLinkAngle = armSubsystem.getLinkAngle();
+        double currentAimAngle  = armSubsystem.getAimAngle();
+
+        double linkAngleError   = 0;
+        double aimAngleError    = 0;
+
+        double linkSpeed        = 0;
+        double aimSpeed         = 0;
+
         switch (state) {
 
         case MOVE_AIM_ABOVE_90:
 
-            armSubsystem.setAimSpeed(ArmConstants.FAST_AIM_SPEED);
-            armSubsystem.setArmSpeed(0);
+            // Run the aim motor to lift/extend the aim
+            // while holding the link angle fixed.
+            armSubsystem.setAimPivotSpeed(ArmConstants.FAST_AIM_SPEED);
 
-            if (armSubsystem.getAimAngle() > 90) {
-                state = State.MOVE_TO_TARGET;
+            // TODO: Does this hold the link angle or is a PID required?
+            armSubsystem.setLinkPivotSpeed(0);
+
+            if (currentAimAngle > 90) {
+                logStateTransition("Move to over bumper", "Aim above 90 deg");
+                state = State.MOVE_TO_OVER_BUMPER;
             }
 
             break;
 
-        case MOVE_TO_TARGET:
+        case MOVE_TO_OVER_BUMPER:
 
-            // TODO: total arm + aim angle should not be greater than
-            // NOTE: The arm and aim are geared the same so they move at the
-            // same rate.
+            // Calculate the errors
 
-            double aimSpeed = ArmConstants.FAST_AIM_SPEED;
+            linkAngleError = ArmConstants.OVER_BUMPER_POSITION.linkAngle - currentLinkAngle;
+            aimAngleError = ArmConstants.OVER_BUMPER_POSITION.aimAngle - currentAimAngle;
 
+            // Move the motor with the larger error at the appropriate speed (Fast or Slow) depending on the error
+            if (Math.abs(aimAngleError) >= Math.abs(linkAngleError)) {
 
-            if (Math.abs(targetArmPosition.aimAngle - armSubsystem.getAimAngle()) < ArmConstants.SLOW_ARM_ZONE_DEG) {
-                aimSpeed = ArmConstants.SLOW_AIM_SPEED;
+                aimSpeed = ArmConstants.FAST_AIM_SPEED;
+
+                // Set the link speed relative to the aim speed.
+                if (Math.abs(linkAngleError) > ArmConstants.AT_TARGET_DEG) {
+                    linkSpeed = Math.abs((linkAngleError / aimAngleError)) * aimSpeed;
+                }
+            }
+            else {
+
+                linkSpeed = ArmConstants.FAST_LINK_SPEED;
+
+                // Set the aim speed relative to the link speed.
+                if (Math.abs(aimAngleError) > ArmConstants.AT_TARGET_DEG) {
+                    aimSpeed = Math.abs((aimAngleError / linkAngleError)) * linkSpeed;
+                }
             }
 
-            if (Math.abs(targetArmPosition.aimAngle - armSubsystem.getAimAngle()) < ArmConstants.AT_TARGET_DEG) {
-                aimSpeed = 0;
-            }
-
-            if (armSubsystem.getAimAngle() > targetArmPosition.aimAngle) {
+            if (aimAngleError < 0) {
                 aimSpeed *= -1.0;
             }
 
-            armSubsystem.setAimSpeed(aimSpeed);
-
-            /*
-             * Set Aim
-             */
-            double armSpeed = ArmConstants.FAST_ARM_SPEED;
-
-
-            if (Math.abs(targetArmPosition.armAngle - armSubsystem.getArmAngle()) < ArmConstants.SLOW_ARM_ZONE_DEG) {
-                armSpeed = ArmConstants.SLOW_ARM_SPEED;
+            if (linkAngleError < 0) {
+                linkSpeed *= -1.0;
             }
 
-            if (Math.abs(targetArmPosition.armAngle - armSubsystem.getArmAngle()) < ArmConstants.AT_TARGET_DEG) {
-                armSpeed = 0;
-            }
+            armSubsystem.setLinkPivotSpeed(linkSpeed);
+            armSubsystem.setAimPivotSpeed(aimSpeed);
 
-            if (armSubsystem.getArmAngle() > targetArmPosition.armAngle) {
-                armSpeed *= -1.0;
-            }
+            // If past the bumper danger, move to the intake position.
 
-            armSubsystem.setArmSpeed(armSpeed);
+            // If the aim is higher than the over-the-bumper angle, then it is safe to start
+            // lowering the link to the intake position.
+            if (aimAngleError < 0) {
+                logStateTransition("Move to intake", "Aim extended past over bumper position");
+                state = State.MOVE_TO_INTAKE;
+            }
 
             break;
+
+        case MOVE_TO_INTAKE:
+
+            // Calculate the errors
+
+            linkAngleError = ArmConstants.INTAKE_ARM_POSITION.linkAngle - currentLinkAngle;
+            aimAngleError = ArmConstants.INTAKE_ARM_POSITION.aimAngle - currentAimAngle;
+
+            // Move the motor with the larger error at the appropriate speed (Fast or Slow) depending on the error
+            if (Math.abs(aimAngleError) >= Math.abs(linkAngleError)) {
+
+                aimSpeed = ArmConstants.FAST_AIM_SPEED;
+
+                if (Math.abs(aimAngleError) < ArmConstants.SLOW_ARM_ZONE_DEG) {
+                    aimSpeed = ArmConstants.SLOW_AIM_SPEED;
+                }
+
+                if (Math.abs(aimAngleError) < ArmConstants.AT_TARGET_DEG) {
+                    aimSpeed = 0;
+                }
+
+                // Set the link speed relative to the aim speed.
+                if (Math.abs(linkAngleError) > ArmConstants.AT_TARGET_DEG) {
+                    linkSpeed = Math.abs((linkAngleError / aimAngleError)) * aimSpeed;
+                }
+            }
+            else {
+
+                linkSpeed = ArmConstants.FAST_LINK_SPEED;
+
+                if (Math.abs(linkAngleError) < ArmConstants.SLOW_ARM_ZONE_DEG) {
+                    linkSpeed = ArmConstants.SLOW_LINK_SPEED;
+                }
+
+                if (Math.abs(linkAngleError) < ArmConstants.AT_TARGET_DEG) {
+                    linkSpeed = 0;
+                }
+
+                // Set the aim speed relative to the link speed.
+                if (Math.abs(aimAngleError) > ArmConstants.AT_TARGET_DEG) {
+                    aimSpeed = Math.abs((aimAngleError / linkAngleError)) * linkSpeed;
+                }
+            }
+
+            if (aimAngleError < 0) {
+                aimSpeed *= -1.0;
+            }
+
+            if (linkAngleError < 0) {
+                linkSpeed *= -1.0;
+            }
+
+            armSubsystem.setLinkPivotSpeed(linkSpeed);
+            armSubsystem.setAimPivotSpeed(aimSpeed);
+
+            break;
+
         }
     }
 
