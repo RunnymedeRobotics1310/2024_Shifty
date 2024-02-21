@@ -90,8 +90,8 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         // Move the aim and link angles based on the speed.
-        aimAngleEncoder  = Math.min(130, Math.max(0, aimAngleEncoder + aimPivotSpeed));
-        linkAngleEncoder = Math.min(130, Math.max(0, linkAngleEncoder + linkPivotSpeed));
+        aimAngleEncoder  = Math.min(165, Math.max(0, aimAngleEncoder + aimPivotSpeed));
+        linkAngleEncoder = Math.min(145, Math.max(0, linkAngleEncoder + linkPivotSpeed));
 
         // END TODO Code removal
 

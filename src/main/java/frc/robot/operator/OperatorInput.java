@@ -5,9 +5,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
+import frc.robot.commands.arm.AimAmpCommand;
+import frc.robot.commands.arm.AimSpeakerCommand;
+import frc.robot.commands.arm.CompactPoseCommand;
 import frc.robot.commands.arm.ShootCommand;
 import frc.robot.commands.arm.StartIntakeCommand;
-import frc.robot.commands.drive.DriveToTargetCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JackmanVisionSubsystem;
@@ -41,7 +43,14 @@ public class OperatorInput extends SubsystemBase {
     }
 
     public boolean isShoot() {
-        return driverController.getYButton();
+        double rightTrigger = driverController.getRightTriggerAxis();
+        if (rightTrigger == 1) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
     }
 
     public boolean isStartIntakePressed() {
@@ -52,6 +61,13 @@ public class OperatorInput extends SubsystemBase {
         return driverController.getXButton();
     }
 
+    public boolean isAmpPressed() {
+        return driverController.getBButton();
+    }
+
+    public boolean isSpeakerPressed() {
+        return driverController.getYButton();
+    }
 
     /**
      * Use this method to define your robotFunction -> command mappings.
@@ -71,7 +87,13 @@ public class OperatorInput extends SubsystemBase {
             .onTrue(new StartIntakeCommand(armSubsystem));
 
         new Trigger(() -> isCompactPressed())
-            .onTrue(new DriveToTargetCommand(1, 0.2, driveSubsystem, visionSubsystem));
+            .onTrue(new CompactPoseCommand(armSubsystem));
+
+        new Trigger(() -> isAmpPressed())
+            .onTrue(new AimAmpCommand(armSubsystem));
+
+        new Trigger(() -> isSpeakerPressed())
+            .onTrue(new AimSpeakerCommand(armSubsystem));
     }
 
     @Override
