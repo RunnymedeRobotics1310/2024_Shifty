@@ -1,10 +1,12 @@
 package frc.robot.operator;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
+import frc.robot.commands.SystemTestCommand;
 import frc.robot.commands.arm.ShootCommand;
 import frc.robot.commands.arm.StartIntakeCommand;
 import frc.robot.commands.drive.DriveToTargetCommand;
@@ -24,6 +26,12 @@ public class OperatorInput extends SubsystemBase {
         OperatorConstants.DRIVER_CONTROLLER_PORT,
         OperatorConstants.GAME_CONTROLLER_STICK_DEADBAND);
 
+
+    // Allow the system test command to access the controller directly
+    public GameController getDriverController() {
+        return driverController;
+    }
+
     /*
      * Map all functions to buttons.
      *
@@ -36,7 +44,7 @@ public class OperatorInput extends SubsystemBase {
 
     // Cancel all commands when the driver presses the XBox controller three lines (aka. start)
     // button
-    public boolean isCancel() {
+    public boolean isCancelPressed() {
         return driverController.getStartButton();
     }
 
@@ -52,6 +60,11 @@ public class OperatorInput extends SubsystemBase {
         return driverController.getXButton();
     }
 
+    public boolean isSystemTestPressed() {
+        return driverController.getStartButton() && driverController.getBackButton();
+    }
+
+
 
     /**
      * Use this method to define your robotFunction -> command mappings.
@@ -61,8 +74,11 @@ public class OperatorInput extends SubsystemBase {
     public void configureButtonBindings(DriveSubsystem driveSubsystem, ArmSubsystem armSubsystem,
         JackmanVisionSubsystem visionSubsystem) {
 
-        new Trigger(() -> isCancel())
+        new Trigger(() -> isCancelPressed())
             .onTrue(new CancelCommand(this, driveSubsystem));
+
+        new Trigger(() -> isSystemTestPressed() && !DriverStation.isFMSAttached())
+            .onTrue(new SystemTestCommand(this, armSubsystem));
 
         new Trigger(() -> isShoot())
             .onTrue(new ShootCommand(armSubsystem));
