@@ -21,6 +21,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     private DigitalInput          noteDetector        = new DigitalInput(1);
 
+    private boolean               safetyEnabled       = false;
+    private long                  safetyStartTime     = 0;
+
     public ArmSubsystem(LightsSubsystem lightsSubsystem) {
 
         this.lightsSubsystem  = lightsSubsystem;
@@ -44,10 +47,19 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void setLinkPivotSpeed(double speed) {
         this.linkPivotSpeed = speed;
+
+        checkArmSafety();
+
+        // linkPivotMotor.setSpeed(linkPivotSpeed);
     }
 
     public void setAimPivotSpeed(double speed) {
+
         this.aimPivotSpeed = speed;
+
+        checkArmSafety();
+        // linkAimMotor.setSpeed(linkAimSpeed);
+
     }
 
     public void setIntakeSpeed(double intakeSpeed) {
@@ -72,6 +84,8 @@ public class ArmSubsystem extends SubsystemBase {
 
         // TODO REMOVE this code when the real robot is available
 
+        // FAKE THE MOTOR ACTION
+
         // Fake some momentum in the motors by having them
         // slowly ramp towards the set speed. In reality,
         // this will happen much faster.
@@ -95,6 +109,24 @@ public class ArmSubsystem extends SubsystemBase {
 
         // END TODO Code removal
 
+        /*
+         * Safety-check all of the motors speeds, and
+         * set the motor outputs.
+         *
+         * This is required because a command may set the motor speed
+         * at the beginning and may not ever set it again. The periodic
+         * loop checks the limits every loop.
+         */
+        setLinkPivotSpeed(linkPivotSpeed);
+        setAimPivotSpeed(aimPivotSpeed);
+
+        // Latch the arm safety for 2 seconds when a safety condition
+        // is activated.
+        if (safetyEnabled) {
+            if ((System.currentTimeMillis() - safetyStartTime) > 2000) {
+                safetyEnabled = false;
+            }
+        }
 
         /*
          * Update the SmartDashboard
@@ -112,7 +144,9 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Aim Speed", aimPivotSpeed);
         SmartDashboard.putNumber("Aim Angle", getAimAngle());
 
-        SmartDashboard.putBoolean("Note Held", isNoteDetected());
+        SmartDashboard.putBoolean("Note Detected", isNoteDetected());
+
+        SmartDashboard.putBoolean("Arm Safety", safetyEnabled);
 
         // Update the lights
         updateLights();
@@ -133,6 +167,10 @@ public class ArmSubsystem extends SubsystemBase {
         return sb.toString();
     }
 
+    /*
+     * Update the lights based on the current state of the arm
+     * FIXME: the lighting pattern is specific to Shifty.
+     */
     private void updateLights() {
 
         boolean intakeAtTargetSpeed = Math.abs(shooterSpeed - intakeSpeedEncoder) < .05;
@@ -150,4 +188,65 @@ public class ArmSubsystem extends SubsystemBase {
         lightsSubsystem.setNoteHeld(isNoteDetected());
     }
 
+    private void checkArmSafety() {
+
+        // NOTE: Set safetyEnabled = true if a safety condition
+        // is encountered
+
+        // TODO:
+
+        /*
+         * LINK RANGE
+         */
+        /*
+         * Never drive the link lower than the hard stop.
+         *
+         * If the link lower limit switch is active, then stop lowering
+         * the link.
+         */
+
+        /*
+         * Never drive the link past 125 deg.
+         *
+         * The arm never needs to be that high.
+         */
+
+        /*
+         * AIM RANGE
+         */
+        /*
+         * Never drive the aim angle > 200 deg.
+         *
+         * The aim never needs to be that high.
+         */
+
+        /*
+         * Never drive the aim angle < 60 deg.
+         *
+         * The aim never needs to be that low.
+         */
+
+        /*
+         * TOTAL ARM ANGLES
+         */
+        /*
+         * Never drive the motors to a total of less than 180 degrees when
+         * the arm is inside the frame Link angle < over bumper position
+         *
+         * Strategy:
+         * Turn off the motor that is lowering the total arm angle.
+         * Allow any positive movements to continue.
+         */
+
+
+        /*
+         * Never drive the motors to a total of more xxx degrees when
+         * the arm is near the 4ft limit (arm angle > xxx).
+         * Link angle > xxx position
+         *
+         * Strategy:
+         * Turn off the motor that is raising the total arm angle.
+         * Allow any negative movements to continue.
+         */
+    }
 }
