@@ -8,7 +8,7 @@ import frc.robot.subsystems.ArmSubsystem;
 public class AimAmpCommand extends ArmBaseCommand {
 
     private enum State {
-        MOVE_TO_AMP, MOVE_TO_OVER_BUMPER
+        MOVE_TO_AMP, MOVE_TO_OVER_BUMPER, SET_SHOOTER_SPEED
     };
 
     private State              state = State.MOVE_TO_AMP;
@@ -163,6 +163,10 @@ public class AimAmpCommand extends ArmBaseCommand {
 
             break;
 
+        case SET_SHOOTER_SPEED:
+            armSubsystem.setShooterSpeed(ArmConstants.SHOOTER_SPEED);
+
+            break;
         }
     }
 }

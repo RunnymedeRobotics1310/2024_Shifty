@@ -91,7 +91,8 @@ public class StartIntakeCommand extends ArmBaseCommand {
             linkAngleError = ArmConstants.OVER_BUMPER_POSITION.linkAngle - currentLinkAngle;
             aimAngleError = ArmConstants.OVER_BUMPER_POSITION.aimAngle - currentAimAngle;
 
-            // Move the motor with the larger error at the appropriate speed (Fast or Slow) depending on the error
+            // Move the motor with the larger error at the appropriate speed (Fast or Slow)
+            // depending on the error
             if (Math.abs(aimAngleError) >= Math.abs(linkAngleError)) {
 
                 aimSpeed = ArmConstants.FAST_AIM_SPEED;
@@ -140,7 +141,8 @@ public class StartIntakeCommand extends ArmBaseCommand {
             linkAngleError = ArmConstants.INTAKE_ARM_POSITION.linkAngle - currentLinkAngle;
             aimAngleError = ArmConstants.INTAKE_ARM_POSITION.aimAngle - currentAimAngle;
 
-            // Move the motor with the larger error at the appropriate speed (Fast or Slow) depending on the error
+            // Move the motor with the larger error at the appropriate speed (Fast or Slow)
+            // depending on the error
             if (Math.abs(aimAngleError) >= Math.abs(linkAngleError)) {
 
                 aimSpeed = ArmConstants.FAST_AIM_SPEED;

@@ -8,7 +8,7 @@ import frc.robot.subsystems.ArmSubsystem;
 public class AimSpeakerCommand extends ArmBaseCommand {
 
     private enum State {
-        MOVE_TO_SPEAKER, MOVE_TO_OVER_BUMPER
+        MOVE_TO_SPEAKER, MOVE_TO_OVER_BUMPER, SET_SHOOTER_SPEED
     };
 
     private State              state = State.MOVE_TO_SPEAKER;
@@ -38,6 +38,9 @@ public class AimSpeakerCommand extends ArmBaseCommand {
         }
         else {
             state = State.MOVE_TO_SPEAKER;
+        }
+        if (state == State.MOVE_TO_SPEAKER) {
+            state = State.SET_SHOOTER_SPEED;
         }
     }
 
@@ -160,6 +163,11 @@ public class AimSpeakerCommand extends ArmBaseCommand {
                 logStateTransition("Move to speaker", "Aim over bumper position");
                 state = State.MOVE_TO_SPEAKER;
             }
+
+            break;
+
+        case SET_SHOOTER_SPEED:
+            armSubsystem.setShooterSpeed(ArmConstants.SHOOTER_SPEED);
 
             break;
 
