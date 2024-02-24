@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
+import frc.robot.commands.SystemTestCommand;
 import frc.robot.commands.arm.AimAmpCommand;
 import frc.robot.commands.arm.AimSpeakerCommand;
 import frc.robot.commands.arm.CompactPoseCommand;
@@ -46,7 +47,7 @@ public class OperatorInput extends SubsystemBase {
     // Cancel all commands when the driver presses the XBox controller three lines (aka. start)
     // button
     public boolean isCancelPressed() {
-        return driverController.getStartButton();
+        return driverController.getStartButton() && !driverController.getBackButton();
     }
 
     public boolean isShoot() {
@@ -67,7 +68,7 @@ public class OperatorInput extends SubsystemBase {
     public boolean isCompactPressed() {
         return driverController.getXButton();
     }
-    
+
     public boolean isSystemTestPressed() {
         return driverController.getStartButton() && driverController.getBackButton();
     }
@@ -89,7 +90,7 @@ public class OperatorInput extends SubsystemBase {
         JackmanVisionSubsystem visionSubsystem) {
 
         new Trigger(() -> isCancelPressed())
-            .onTrue(new CancelCommand(this, driveSubsystem));
+            .onTrue(new CancelCommand(this, driveSubsystem, armSubsystem));
 
         new Trigger(() -> isSystemTestPressed() && !DriverStation.isFMSAttached())
             .onTrue(new SystemTestCommand(this, armSubsystem));
