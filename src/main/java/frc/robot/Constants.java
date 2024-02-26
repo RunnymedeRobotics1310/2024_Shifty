@@ -94,8 +94,27 @@ public final class Constants {
 
         public static final double      SLOW_ARM_ZONE_DEG          = 20.0;
         public static final double      AT_TARGET_DEG              = 1;
+        public static final double      AT_TARGET_SPEED            = 0.05;
 
         public static final double      INTAKE_SPEED               = 1;
-        public static final double      SHOOTER_SPEED              = 1;
+        public static final double      SHOOTER_SPEED              = 0.05;                         // TODO:Is
+                                                                                                   // this
+                                                                                                   // the
+                                                                                                   // right
+                                                                                                   // value?
+
+        public static final double      LINK_MAX                   = 125;
+        public static final double      LINK_MIN                   = 20;
+        public static final double      AIM_MAX                    = 200;
+        public static final double      AIM_MIN                    = 60;
+
+        public static final double      MIN_ANGLE_SUM              = 180;
+        public static final double      MAX_ANGLE_SUM              = 1310;                         // TODO:find
+                                                                                                   // actual
+                                                                                                   // value
+                                                                                                   // of
+                                                                                                   // MAX_ANGLE_SUM
+
+
     }
 }

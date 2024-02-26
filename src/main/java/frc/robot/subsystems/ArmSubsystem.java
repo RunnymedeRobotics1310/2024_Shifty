@@ -41,6 +41,14 @@ public class ArmSubsystem extends SubsystemBase {
         return linkAngleEncoder;
     }
 
+    public double getShooterSpeed() {
+        return shooterSpeedEncoder;
+    }
+
+    public double getIntakeSpeed() {
+        return intakeSpeedEncoder;
+    }
+
     public boolean isNoteDetected() {
         return !noteDetector.get();
     }
@@ -104,8 +112,8 @@ public class ArmSubsystem extends SubsystemBase {
         }
 
         // Move the aim and link angles based on the speed.
-        aimAngleEncoder  = Math.min(165, Math.max(0, aimAngleEncoder + aimPivotSpeed));
-        linkAngleEncoder = Math.min(145, Math.max(0, linkAngleEncoder + linkPivotSpeed));
+        aimAngleEncoder  = Math.min(200, Math.max(0, aimAngleEncoder + aimPivotSpeed));
+        linkAngleEncoder = Math.min(200, Math.max(0, linkAngleEncoder + linkPivotSpeed));
 
         // END TODO Code removal
 
@@ -204,12 +212,22 @@ public class ArmSubsystem extends SubsystemBase {
          * If the link lower limit switch is active, then stop lowering
          * the link.
          */
+        if (linkPivotSpeed < 0 && linkAngleEncoder <= ArmConstants.LINK_MIN) {
+            linkPivotSpeed  = 0;
+            safetyEnabled   = true;
+            safetyStartTime = System.currentTimeMillis();
+        }
 
         /*
          * Never drive the link past 125 deg.
          *
          * The arm never needs to be that high.
          */
+        if (linkPivotSpeed > 0 && linkAngleEncoder >= ArmConstants.LINK_MAX) {
+            linkPivotSpeed  = 0;
+            safetyEnabled   = true;
+            safetyStartTime = System.currentTimeMillis();
+        }
 
         /*
          * AIM RANGE
@@ -219,12 +237,22 @@ public class ArmSubsystem extends SubsystemBase {
          *
          * The aim never needs to be that high.
          */
+        if (aimPivotSpeed > 0 && aimAngleEncoder >= ArmConstants.AIM_MAX) {
+            aimPivotSpeed   = 0;
+            safetyEnabled   = true;
+            safetyStartTime = System.currentTimeMillis();
+        }
 
         /*
          * Never drive the aim angle < 60 deg.
          *
          * The aim never needs to be that low.
          */
+        if (aimPivotSpeed < 0 && aimAngleEncoder <= ArmConstants.AIM_MIN) {
+            aimPivotSpeed   = 0;
+            safetyEnabled   = true;
+            safetyStartTime = System.currentTimeMillis();
+        }
 
         /*
          * TOTAL ARM ANGLES
@@ -237,6 +265,18 @@ public class ArmSubsystem extends SubsystemBase {
          * Turn off the motor that is lowering the total arm angle.
          * Allow any positive movements to continue.
          */
+        if (aimAngleEncoder + linkAngleEncoder <= ArmConstants.MIN_ANGLE_SUM) {
+            if (aimPivotSpeed < 0) {
+                aimPivotSpeed   = 0;
+                safetyEnabled   = true;
+                safetyStartTime = System.currentTimeMillis();
+            }
+            if (linkPivotSpeed < 0) {
+                linkPivotSpeed  = 0;
+                safetyEnabled   = true;
+                safetyStartTime = System.currentTimeMillis();
+            }
+        }
 
 
         /*
@@ -248,5 +288,19 @@ public class ArmSubsystem extends SubsystemBase {
          * Turn off the motor that is raising the total arm angle.
          * Allow any negative movements to continue.
          */
+
+        if (aimAngleEncoder + linkAngleEncoder >= ArmConstants.MAX_ANGLE_SUM) {
+            if (aimPivotSpeed > 0) {
+                aimPivotSpeed   = 0;
+                safetyEnabled   = true;
+                safetyStartTime = System.currentTimeMillis();
+            }
+            if (linkPivotSpeed > 0) {
+                linkPivotSpeed  = 0;
+                safetyEnabled   = true;
+                safetyStartTime = System.currentTimeMillis();
+            }
+        }
+        return;
     }
 }
