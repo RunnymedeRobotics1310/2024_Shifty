@@ -98,10 +98,10 @@ public final class Constants {
 
         public static final double      INTAKE_SPEED               = 1;
         public static final double      SHOOTER_SPEED              = 0.05;                         // TODO:Is
-                                                                                                   // this
-                                                                                                   // the
-                                                                                                   // right
-                                                                                                   // value?
+        // this
+        // the
+        // right
+        // value?
 
         public static final double      LINK_MAX                   = 125;
         public static final double      LINK_MIN                   = 20;
@@ -115,6 +115,17 @@ public final class Constants {
                                                                                                    // of
                                                                                                    // MAX_ANGLE_SUM
 
+
+    }
+
+    public static final class ClimbConstants {
+
+        public static final double FAST_CLIMB_SPEED = .3;
+        public static final double SLOW_CLIMB_SPEED = .1;
+
+        public static final double CLIMB_MAX        = 20;// TODO: what are the min/max encoder
+                                                         // values
+        public static final double CLIMB_MIN        = 1;
 
     }
 }
