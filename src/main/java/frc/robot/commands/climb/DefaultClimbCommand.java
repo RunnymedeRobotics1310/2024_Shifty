@@ -43,16 +43,20 @@ public class DefaultClimbCommand extends LoggingCommand {
 
         if (leftUp) {
             setLeftClimbSpeed(ClimbConstants.SLOW_CLIMB_SPEED);
+            System.out.println("left up");
         }
         else if (leftDown) {
             setLeftClimbSpeed(ClimbConstants.SLOW_CLIMB_SPEED * -1);
+            System.out.println("left down");
         }
 
         if (rightUp) {
             setRightClimbSpeed(ClimbConstants.SLOW_CLIMB_SPEED);
+            System.out.println("right up");
         }
         else if (rightDown) {
             setRightClimbSpeed(ClimbConstants.SLOW_CLIMB_SPEED * -1);
+            System.out.println("right down");
         }
 
 
