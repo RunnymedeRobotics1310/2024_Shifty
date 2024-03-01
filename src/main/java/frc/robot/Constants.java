@@ -115,6 +115,8 @@ public final class Constants {
                                                                                                    // value
                                                                                                    // of
                                                                                                    // MAX_ANGLE_SUM
+        /** Amount of output required to hold the Aim Pivot when the Aim is parallel to the ground */
+        public static final double      MAX_AIM_HOLD               = .2;
 
 
     }

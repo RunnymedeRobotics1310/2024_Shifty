@@ -12,15 +12,10 @@ public class StartIntakeCommand extends ArmBaseCommand {
         MOVE_AIM_ABOVE_90, MOVE_TO_OVER_BUMPER, MOVE_TO_INTAKE
     };
 
-    private State              state = State.MOVE_AIM_ABOVE_90;
-
-    private final ArmSubsystem armSubsystem;
+    private State state = State.MOVE_AIM_ABOVE_90;
 
     public StartIntakeCommand(ArmSubsystem armSubsystem) {
-
-        this.armSubsystem = armSubsystem;
-
-        addRequirements(armSubsystem);
+        super(armSubsystem);
     }
 
     @Override
