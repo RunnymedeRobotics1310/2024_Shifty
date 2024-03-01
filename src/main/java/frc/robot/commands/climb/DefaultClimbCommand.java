@@ -9,17 +9,17 @@ import frc.robot.subsystems.ClimbSubsystem;
 public class DefaultClimbCommand extends LoggingCommand {
 
     private final ClimbSubsystem climbSubsystem;
-    private final XboxController driverController;
+    private final XboxController operatorController;
 
     /**
      * Creates a new ExampleCommand.
      *
      * @param climbSubsystem The subsystem used by this command.
      */
-    public DefaultClimbCommand(GameController driverController, ClimbSubsystem climbSubsystem) {
+    public DefaultClimbCommand(GameController operatorController, ClimbSubsystem climbSubsystem) {
 
-        this.driverController = driverController;
-        this.climbSubsystem   = climbSubsystem;
+        this.operatorController = operatorController;
+        this.climbSubsystem     = climbSubsystem;
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(climbSubsystem);
@@ -35,11 +35,11 @@ public class DefaultClimbCommand extends LoggingCommand {
     @Override
     public void execute() {
 
-        boolean leftUp    = driverController.getLeftBumper();
-        boolean leftDown  = (driverController.getPOV() == 180);
+        boolean leftUp    = operatorController.getLeftBumper();
+        boolean leftDown  = (operatorController.getLeftTriggerAxis() == 1);
 
-        boolean rightUp   = driverController.getRightBumper();
-        boolean rightDown = (driverController.getPOV() == 90);
+        boolean rightUp   = operatorController.getRightBumper();
+        boolean rightDown = (operatorController.getRightTriggerAxis() == 1);
 
         if (leftUp) {
             setLeftClimbSpeed(ClimbConstants.SLOW_CLIMB_SPEED);
