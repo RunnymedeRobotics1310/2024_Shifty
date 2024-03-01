@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ClimbConstants;
 
 public class ClimbSubsystem extends SubsystemBase {
 
@@ -54,16 +53,20 @@ public class ClimbSubsystem extends SubsystemBase {
 
         // FAKE THE MOTOR ACTION
         if (leftClimbSpeed > leftClimbSpeedEncoder) {
+            System.out.println("left up");
             leftClimbSpeedEncoder += .002;
         }
         else if (leftClimbSpeed < leftClimbSpeedEncoder) {
+            System.out.println("left down");
             leftClimbSpeedEncoder -= .002;
         }
 
         if (rightClimbSpeed > rightClimbSpeedEncoder) {
+            System.out.println("right up");
             rightClimbSpeedEncoder += .002;
         }
         else if (rightClimbSpeed < rightClimbSpeedEncoder) {
+            System.out.println("right down ");
             rightClimbSpeedEncoder -= .002;
         }
 
@@ -115,34 +118,39 @@ public class ClimbSubsystem extends SubsystemBase {
 
         /*
          * RIGHT CLIMB RANGE
-         */
-        if (rightClimbSpeed < 0 && rightClimbSpeedEncoder <= ClimbConstants.CLIMB_MIN) {
-            rightClimbSpeed = 0;
-            safetyEnabled   = true;
-            safetyStartTime = System.currentTimeMillis();
-        }
-
-        if (rightClimbSpeed > 0 && rightClimbSpeedEncoder <= ClimbConstants.CLIMB_MAX) {
-            rightClimbSpeed = 0;
-            safetyEnabled   = true;
-            safetyStartTime = System.currentTimeMillis();
-        }
-
-        /*
+         * 
+         * if (rightClimbSpeed < 0 && rightClimbSpeedEncoder <= ClimbConstants.CLIMB_MIN) {
+         * rightClimbSpeed = 0;
+         * safetyEnabled = true;
+         * safetyStartTime = System.currentTimeMillis();
+         * System.out.println("right min");
+         * }
+         * 
+         * if (rightClimbSpeed > 0 && rightClimbSpeedEncoder <= ClimbConstants.CLIMB_MAX) {
+         * rightClimbSpeed = 0;
+         * safetyEnabled = true;
+         * safetyStartTime = System.currentTimeMillis();
+         * System.out.println("right max");
+         * }
+         * 
+         * /*
          * LEFT CLIMB RANGE
+         * 
+         * 
+         * if (leftClimbSpeed < 0 && leftClimbSpeedEncoder <= ClimbConstants.CLIMB_MIN) {
+         * leftClimbSpeed = 0;
+         * safetyEnabled = true;
+         * safetyStartTime = System.currentTimeMillis();
+         * System.out.println("left min");
+         * }
+         * 
+         * if (leftClimbSpeed > 0 && leftClimbSpeedEncoder <= ClimbConstants.CLIMB_MAX) {
+         * leftClimbSpeed = 0;
+         * safetyEnabled = true;
+         * safetyStartTime = System.currentTimeMillis();
+         * System.out.println("left max");
+         * }
          */
-
-        if (leftClimbSpeed < 0 && leftClimbSpeedEncoder <= ClimbConstants.CLIMB_MIN) {
-            leftClimbSpeed  = 0;
-            safetyEnabled   = true;
-            safetyStartTime = System.currentTimeMillis();
-        }
-
-        if (leftClimbSpeed > 0 && leftClimbSpeedEncoder <= ClimbConstants.CLIMB_MAX) {
-            leftClimbSpeed  = 0;
-            safetyEnabled   = true;
-            safetyStartTime = System.currentTimeMillis();
-        }
 
         return;
     }

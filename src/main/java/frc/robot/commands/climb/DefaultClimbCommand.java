@@ -36,29 +36,28 @@ public class DefaultClimbCommand extends LoggingCommand {
     public void execute() {
 
         boolean leftUp    = driverController.getLeftBumper();
-        boolean leftDown  = (driverController.getLeftTriggerAxis() == 1);
+        boolean leftDown  = (driverController.getPOV() == 180);
 
         boolean rightUp   = driverController.getRightBumper();
-        boolean rightDown = (driverController.getRightTriggerAxis() == 1);
+        boolean rightDown = (driverController.getPOV() == 90);
 
         if (leftUp) {
             setLeftClimbSpeed(ClimbConstants.SLOW_CLIMB_SPEED);
-            System.out.println("left up");
+
         }
         else if (leftDown) {
-            setLeftClimbSpeed(ClimbConstants.SLOW_CLIMB_SPEED * -1);
-            System.out.println("left down");
+            setLeftClimbSpeed(-ClimbConstants.SLOW_CLIMB_SPEED);
+
         }
 
         if (rightUp) {
             setRightClimbSpeed(ClimbConstants.SLOW_CLIMB_SPEED);
-            System.out.println("right up");
+
         }
         else if (rightDown) {
-            setRightClimbSpeed(ClimbConstants.SLOW_CLIMB_SPEED * -1);
-            System.out.println("right down");
-        }
+            setRightClimbSpeed(-ClimbConstants.SLOW_CLIMB_SPEED);
 
+        }
 
     }
 

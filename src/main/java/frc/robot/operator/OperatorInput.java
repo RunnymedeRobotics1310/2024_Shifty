@@ -24,14 +24,21 @@ import frc.robot.subsystems.JackmanVisionSubsystem;
  */
 public class OperatorInput extends SubsystemBase {
 
-    public final GameController driverController = new GameController(
+    public final GameController driverController   = new GameController(
         OperatorConstants.DRIVER_CONTROLLER_PORT,
         OperatorConstants.GAME_CONTROLLER_STICK_DEADBAND);
 
+    public final GameController operatorController = new GameController(
+        OperatorConstants.OPERATOR_CONTROLLER_PORT,
+        OperatorConstants.GAME_CONTROLLER_STICK_DEADBAND);
 
     // Allow the system test command to access the controller directly
     public GameController getDriverController() {
         return driverController;
+    }
+
+    public GameController getOperatorController() {
+        return operatorController;
     }
 
     /*

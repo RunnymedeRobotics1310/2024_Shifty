@@ -57,6 +57,7 @@ public final class Constants {
     public static final class OperatorConstants {
 
         public static final int    DRIVER_CONTROLLER_PORT         = 0;
+        public static final int    OPERATOR_CONTROLLER_PORT       = 1;
         public static final double GAME_CONTROLLER_STICK_DEADBAND = 0.2;
     }
 
@@ -123,9 +124,9 @@ public final class Constants {
         public static final double FAST_CLIMB_SPEED = .3;
         public static final double SLOW_CLIMB_SPEED = .1;
 
-        public static final double CLIMB_MAX        = 20;// TODO: what are the min/max encoder
-                                                         // values
-        public static final double CLIMB_MIN        = 1;
+        public static final double CLIMB_MAX        = 240;// TODO: what are the min/max encoder
+                                                          // values
+        public static final double CLIMB_MIN        = 0;
 
     }
 }
