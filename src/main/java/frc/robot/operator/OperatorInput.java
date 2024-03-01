@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelCommand;
-import frc.robot.commands.drive.DriveToTargetCommand;
+//import frc.robot.commands.drive.DriveToTargetCommand;
 import frc.robot.commands.shooter.IntakeCommand;
 import frc.robot.commands.shooter.ShootCommand;
 import frc.robot.subsystems.DriveSubsystem;
@@ -70,8 +70,8 @@ public class OperatorInput extends SubsystemBase {
         new Trigger(() -> isIntake())
             .onTrue(new IntakeCommand(intakeSubsystem));
 
-        new Trigger(this::isDriveToTarget)
-            .onTrue(new DriveToTargetCommand(1, 0.2, driveSubsystem, visionSubsystem));
+//        new Trigger(this::isDriveToTarget)
+//            .onTrue(new DriveToTargetCommand(1, 0.2, driveSubsystem, visionSubsystem));
     }
 
     @Override

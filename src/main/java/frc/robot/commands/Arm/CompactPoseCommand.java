@@ -1,7 +1,7 @@
 package frc.robot.commands.Arm;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ArmSubsystem;
+//import frc.robot.subsystems.ArmSubsystem;
 
 // Move arm to speaker shoot pose
 // Set shooter speed (distance based)
@@ -14,10 +14,10 @@ public class CompactPoseCommand extends Command {
     private double encoderArmAngle;
     private double encoderArmSpeed;
 
-    public void CompactPoseCommand(ArmSubsystem armSubsystem) {
-
-        addRequirements(armSubsystem);
-    }
+//    public void CompactPoseCommand(ArmSubsystem armSubsystem) {
+//
+//        addRequirements(armSubsystem);
+//    }
 
     @Override
     public void initialize() {

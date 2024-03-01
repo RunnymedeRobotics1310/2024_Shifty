@@ -1,7 +1,7 @@
 package frc.robot.commands.Arm;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ArmSubsystem;
+//import frc.robot.subsystems.ArmSubsystem;
 
 // start feeder motor
 // wait
@@ -16,10 +16,10 @@ public class ShootCommand extends Command {
     private double encoderArmSpeed;
 
 
-    public void ShootCommand(ArmSubsystem armSubsystem) {
-
-        addRequirements(armSubsystem);
-    }
+//    public void ShootCommand(ArmSubsystem armSubsystem) {
+//
+//        addRequirements(armSubsystem);
+//    }
 
     @Override
     public void initialize() {

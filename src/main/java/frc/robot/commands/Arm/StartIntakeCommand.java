@@ -1,7 +1,7 @@
 package frc.robot.commands.Arm;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ArmSubsystem;
+//import frc.robot.subsystems.ArmSubsystem;
 
 // Start Intake
 // Align with Note
@@ -15,10 +15,10 @@ public class StartIntakeCommand extends Command {
     private double encoderArmSpeed;
 
 
-    public void StartIntakeCommand(ArmSubsystem armSubsystem) {
-
-        addRequirements(armSubsystem);
-    }
+//    public void StartIntakeCommand(ArmSubsystem armSubsystem) {
+//
+//        addRequirements(armSubsystem);
+//    }
 
     @Override
     public void initialize() {

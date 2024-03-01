@@ -1,9 +1,7 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -28,7 +26,6 @@ public class JackmanVisionSubsystem extends SubsystemBase {
     // configure more pipelines here
     @SuppressWarnings("unused")
     private static final long            PIPELINE_RETROREFLECTIVE_NOTE_DETECT = 0;
-    private static final long            PIPELINE_APRIL_TAG_DETECT            = 1;
     private static final long            PIPELINE_VISUAL                      = 2;
     private static final long            PIPELINE_NEURALNET_NOTE_DETECT       = 7;
 
@@ -49,59 +46,20 @@ public class JackmanVisionSubsystem extends SubsystemBase {
     NetworkTableEntry                    tl                                   = table.getEntry("tl");
     NetworkTableEntry                    cl                                   = table.getEntry("cl");
 
-    NetworkTableEntry                    botpose_wpiblue                      = table.getEntry("botpose_wpiblue");
-    NetworkTableEntry                    botpose_wpired                       = table.getEntry("botpose_wpibred");
 
-    NetworkTableEntry                    tid                                  = table.getEntry("tid");
-
-    double[]                             aprilTagHeights                      = { 53.38, 53.38, 57.13, 57.13, 53.38, 53.38, 57.13,
-            57.13, 53.38, 53.38, 52, 52, 52, 52, 52, 52 };
-
-
-
-    private VisionConstants.VisionTarget currentVisionTarget                  = VisionConstants.VisionTarget.NONE;
 
     public JackmanVisionSubsystem() {
-        setVisionTarget(VisionTarget.APRILTAGS);
+        this.pipeline.setNumber(PIPELINE_NEURALNET_NOTE_DETECT);
+        this.camMode.setNumber(CAM_MODE_VISION);
+        this.ledMode.setNumber(LED_MODE_PIPELINE);
     }
+
+
 
     public double getTargetAreaPercent() {
         return ta.getDouble(-1.0);
     }
 
-    public VisionConstants.VisionTarget getCurrentVisionTarget() {
-        return currentVisionTarget;
-    }
-
-    public void setVisionTarget(VisionConstants.VisionTarget visionTarget) {
-
-        this.currentVisionTarget = visionTarget;
-
-        switch (visionTarget) {
-        case APRILTAGS:
-            this.pipeline.setNumber(PIPELINE_APRIL_TAG_DETECT);
-            this.camMode.setNumber(CAM_MODE_VISION);
-            this.ledMode.setNumber(LED_MODE_PIPELINE);
-            break;
-        case NOTES:
-            this.pipeline.setNumber(PIPELINE_NEURALNET_NOTE_DETECT);
-            this.camMode.setNumber(CAM_MODE_VISION);
-            this.ledMode.setNumber(LED_MODE_PIPELINE);
-            break;
-        case NONE:
-        default:
-            this.pipeline.setNumber(PIPELINE_VISUAL);
-            this.camMode.setNumber(CAM_MODE_DRIVER);
-            this.ledMode.setInteger(LED_MODE_OFF);
-            break;
-        }
-    }
-
-    /**
-     * Determine if a vision target of the current type is found.
-     * <p>
-     * Use {@link #setVisionTarget(VisionConstants.VisionTarget)} to set the vision target type
-     */
     public boolean isVisionTargetFound() {
         return tv.getDouble(-1) == 1;
     }
@@ -112,68 +70,26 @@ public class JackmanVisionSubsystem extends SubsystemBase {
     }
 
 
-    public boolean isNoteTargetAcquired() {
-        // FIXME: finish this
-        if (PIPELINE_NEURALNET_NOTE_DETECT != pipeline.getInteger(-1)) {
-            return false;
-        }
-
-        // Check that a target it acquired.
-        if (!isVisionTargetFound()) {
-            return false;
-        }
-
-        // ***NOTE***: This was from 2023 with retroflective model - likely handling false
-        // positives. Try without first.
-        // is the target area larger than minPercentForConeAcquisition of the screen?
-        // long minPercentForNoteAcquisition = 6;
-        // if (getTargetAreaPercent() < minPercentForNoteAcquisition) {
-        // return false;
-        // }
-
-        double[] tgt = getTarget();
-        if (tgt[0] < 0 || tgt[1] < 0)
-            return false;
-
-        // FIXME: more checks
-        return true;
+    public Rotation2d getNoteOffset(){
+        double angleToTarget = getTargetX();
+        return Rotation2d.fromDegrees(angleToTarget);
     }
 
-    public boolean isVisionTargetClose() {
-        // FIXME: finish this
-        if (PIPELINE_APRIL_TAG_DETECT != pipeline.getInteger(-1)) {
-            return false;
-        }
 
-        // FIXME: Check 10% - it's based on 2023 robot.
-        double pct = getTargetAreaPercent();
-        if (isVisionTargetFound() && pct > 10) {
-            System.out.println("Vision target found and target area is " + pct + " which tells us we are close to the target");
-            return true;
-        }
-        return false;
 
-    }
 
 
     @Override
     public void periodic() {
         // read values periodically and post to smart dashboard periodically
-        SmartDashboard.putBoolean("Limelight Target Found", isVisionTargetFound());
-        SmartDashboard.putBoolean("Note",
-            (currentVisionTarget == VisionConstants.VisionTarget.NOTES) && isVisionTargetFound());
-        SmartDashboard.putBoolean("Tag", currentVisionTarget == VisionConstants.VisionTarget.APRILTAGS && isVisionTargetFound());
-        SmartDashboard.putNumber("Limelight tx-value", tx.getDouble(-1.0));
-        SmartDashboard.putNumber("Limelight ty-value", ty.getDouble(-1.0));
-        SmartDashboard.putNumber("Limelight ta-value", ta.getDouble(-1.0));
-        SmartDashboard.putNumber("Limelight l-value", tl.getDouble(-1.0));
-        SmartDashboard.putNumber("Limelight Cam Mode", camMode.getInteger(-1L));
-        SmartDashboard.putNumber("Limelight LED mode", ledMode.getInteger(-1L));
-        SmartDashboard.putNumber("Limelight Pipeline", pipeline.getInteger(-1L));
-        SmartDashboard.putBoolean("Note Target Acquired", isNoteTargetAcquired());
-        SmartDashboard.putNumber("Distance to Tag", getDistanceToTag());
-        SmartDashboard.putNumber("AprilTag Height", getApriltagHeight());
-        SmartDashboard.putNumberArray("Botpose", getBotPose());
+        SmartDashboard.putBoolean("LimelightJackman/Target Found", isVisionTargetFound());
+        SmartDashboard.putNumber("LimelightJackman/tx-value", tx.getDouble(-1.0));
+        SmartDashboard.putNumber("LimelightJackman/ty-value", ty.getDouble(-1.0));
+        SmartDashboard.putNumber("LimelightJackman/ta-value", ta.getDouble(-1.0));
+        SmartDashboard.putNumber("LimelightJackman/l-value", tl.getDouble(-1.0));
+        SmartDashboard.putNumber("LimelightJackman/Cam Mode", camMode.getInteger(-1L));
+        SmartDashboard.putNumber("LimelightJackman/LED mode", ledMode.getInteger(-1L));
+        SmartDashboard.putNumber("LimelightJackman/Pipeline", pipeline.getInteger(-1L));
     }
 
     /**
@@ -194,7 +110,7 @@ public class JackmanVisionSubsystem extends SubsystemBase {
      *
      * @return limelight X target coordinates
      */
-    public double getTargetX() {
+    private double getTargetX() {
         return tx.getDouble(-1.0);
     }
 
@@ -207,71 +123,6 @@ public class JackmanVisionSubsystem extends SubsystemBase {
         return ty.getDouble(-1.0);
     }
 
-    private double getApriltagHeight() {
-        int tagid = (int) tid.getInteger(-1);
-
-        if (tagid < 1 | tagid > 16) {
-            return -1;
-        }
-
-        return aprilTagHeights[tagid - 1];
-    }
-
-
-    public double getDistanceToTag() {
-        double targetOffsetAngle_Vertical        = ty.getDouble(0.0);
-        // how many degrees back is your limelight rotated from perfectly vertical?
-        double limelightMountAngleDegrees        = -0.7;
-        // distance from the center of the Limelight lens to the floor
-        double limelightLensHeightInches         = 7.72;
-        // distance from the target to the floor
-        double goalHeightInches                  = getApriltagHeight();
-        double angleToGoalDegrees                = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
-
-        double angleToGoalRadians                = angleToGoalDegrees * (3.14159 / 180.0);
-        // calculate distance
-        double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches) / Math.tan(angleToGoalRadians);
-
-        return distanceFromLimelightToGoalInches;
-    }
-
-
-    public double[] getBotPose() {
-        // Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
-
-        // if (alliance.get().equals(DriverStation.Alliance.Red)) {
-        // return botpose_wpired.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0, 0, 0 });
-        // }
-        // else
-        return botpose_wpiblue.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0, 0, 0 });
-    }
-
-    // private static Pose3d toPose3D(double[] inData) {
-    // if (inData.length < 6) {
-    // System.err.println("Bad LL 3D Pose `Data!");
-    // return new Pose3d();
-    // }
-    // return new Pose3d(
-    // new Translation3d(inData[0], inData[1], inData[2]),
-    // new Rotation3d(Units.degreesToRadians(inData[3]), Units.degreesToRadians(inData[4]),
-    // Units.degreesToRadians(inData[5])));
-    // }
-
-    private static Pose2d toPose2D(double[] inData) {
-        if (inData.length < 6) {
-            System.err.println("Bad LL 2D Pose Data!");
-            return new Pose2d();
-        }
-        Translation2d tran2d = new Translation2d(inData[0], inData[1]);
-        Rotation2d    r2d    = new Rotation2d(Units.degreesToRadians(inData[5]));
-        return new Pose2d(tran2d, r2d);
-    }
-
-    public Pose2d getBotPose2d_wpiBlue() {
-
-        double[] result = getBotPose();
-        return toPose2D(result);
-    }
 
 
 }
