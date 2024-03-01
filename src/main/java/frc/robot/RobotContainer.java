@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants.AutoPattern;
 import frc.robot.Constants.DriveConstants.DriveMode;
+import frc.robot.commands.arm.DefaultArmCommand;
 import frc.robot.commands.auto.AutonomousCommand;
 import frc.robot.commands.drive.DefaultDriveCommand;
 import frc.robot.operator.OperatorInput;
@@ -54,6 +55,10 @@ public class RobotContainer {
             new DefaultDriveCommand(
                 operatorInput.driverController, driveModeChooser,
                 driveSubsystem));
+
+        armSubsystem.setDefaultCommand(
+            new DefaultArmCommand(
+                operatorInput.operatorController, armSubsystem));
 
         // Initialize the dashboard choosers
         initDashboardChoosers();
