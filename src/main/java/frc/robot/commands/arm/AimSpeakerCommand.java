@@ -11,15 +11,11 @@ public class AimSpeakerCommand extends ArmBaseCommand {
         MOVE_TO_SPEAKER, MOVE_TO_OVER_BUMPER, SET_SHOOTER_SPEED
     };
 
-    private State              state = State.MOVE_TO_SPEAKER;
-
-    private final ArmSubsystem armSubsystem;
+    private State state = State.MOVE_TO_SPEAKER;
 
     public AimSpeakerCommand(ArmSubsystem armSubsystem) {
 
-        this.armSubsystem = armSubsystem;
-
-        addRequirements(armSubsystem);
+        super(armSubsystem);
     }
 
     @Override

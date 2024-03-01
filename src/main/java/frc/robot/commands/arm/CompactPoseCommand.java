@@ -11,15 +11,11 @@ public class CompactPoseCommand extends ArmBaseCommand {
         MOVE_TO_OVER_BUMPER, MOVE_TO_COMPACT
     };
 
-    private State              state = State.MOVE_TO_OVER_BUMPER;
-
-    private final ArmSubsystem armSubsystem;
+    private State state = State.MOVE_TO_OVER_BUMPER;
 
     public CompactPoseCommand(ArmSubsystem armSubsystem) {
 
-        this.armSubsystem = armSubsystem;
-
-        addRequirements(armSubsystem);
+        super(armSubsystem);
     }
 
     @Override

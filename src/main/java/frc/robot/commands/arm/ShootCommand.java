@@ -9,17 +9,13 @@ public class ShootCommand extends ArmBaseCommand {
         START_INTAKE, STOP_INTAKE, START_SHOOTER, STOP_SHOOTER
     };
 
-    private State              state       = State.START_SHOOTER;
+    private State state       = State.START_SHOOTER;
 
-    private final ArmSubsystem armSubsystem;
-
-    private long               startTimeMs = 0;
+    private long  startTimeMs = 0;
 
     public ShootCommand(ArmSubsystem armSubsystem) {
 
-        this.armSubsystem = armSubsystem;
-
-        addRequirements(armSubsystem);
+        super(armSubsystem);
     }
 
     @Override
