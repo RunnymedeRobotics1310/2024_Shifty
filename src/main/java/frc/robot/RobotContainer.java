@@ -14,9 +14,11 @@ import frc.robot.Constants.AutoConstants.AutoPattern;
 import frc.robot.Constants.DriveConstants.DriveMode;
 import frc.robot.commands.arm.DefaultArmCommand;
 import frc.robot.commands.auto.AutonomousCommand;
+import frc.robot.commands.climb.DefaultClimbCommand;
 import frc.robot.commands.drive.DefaultDriveCommand;
 import frc.robot.operator.OperatorInput;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.JackmanVisionSubsystem;
 import frc.robot.subsystems.LightsSubsystem;
@@ -35,6 +37,7 @@ public class RobotContainer {
 
     // The robot's subsystems and commands are defined here...
     private final DriveSubsystem         driveSubsystem  = new DriveSubsystem();
+    private final ClimbSubsystem         climbSubsystem  = new ClimbSubsystem();
     private final LightsSubsystem        lightsSubsystem = new LightsSubsystem();
     private final JackmanVisionSubsystem visionSubsystem = new JackmanVisionSubsystem();
     private final ArmSubsystem           armSubsystem    = new ArmSubsystem(lightsSubsystem);
@@ -53,8 +56,11 @@ public class RobotContainer {
         // Initialize all Subsystem default commands.
         driveSubsystem.setDefaultCommand(
             new DefaultDriveCommand(
-                operatorInput.driverController, driveModeChooser,
-                driveSubsystem));
+                operatorInput.driverController, driveModeChooser, driveSubsystem));
+
+        climbSubsystem.setDefaultCommand(
+            new DefaultClimbCommand(
+                operatorInput.driverController, climbSubsystem));
 
         armSubsystem.setDefaultCommand(
             new DefaultArmCommand(
