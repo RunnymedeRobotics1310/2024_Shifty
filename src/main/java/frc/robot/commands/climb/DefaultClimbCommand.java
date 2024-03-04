@@ -1,24 +1,24 @@
 package frc.robot.commands.climb;
 
-import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.commands.LoggingCommand;
 import frc.robot.operator.GameController;
+import frc.robot.operator.OperatorInput;
 import frc.robot.subsystems.ClimbSubsystem;
 
 public class DefaultClimbCommand extends LoggingCommand {
 
     private final ClimbSubsystem climbSubsystem;
-    private final XboxController operatorController;
+    private final GameController operatorController;
 
     /**
      * Creates a new ExampleCommand.
      *
      * @param climbSubsystem The subsystem used by this command.
      */
-    public DefaultClimbCommand(GameController operatorController, ClimbSubsystem climbSubsystem) {
+    public DefaultClimbCommand(OperatorInput operatorInput, ClimbSubsystem climbSubsystem) {
 
-        this.operatorController = operatorController;
+        this.operatorController = operatorInput.getOperatorController();
         this.climbSubsystem     = climbSubsystem;
 
         // Use addRequirements() here to declare subsystem dependencies.
@@ -35,29 +35,17 @@ public class DefaultClimbCommand extends LoggingCommand {
     @Override
     public void execute() {
 
-        boolean leftUp    = operatorController.getLeftBumper();
-        boolean leftDown  = (operatorController.getLeftTriggerAxis() == 1);
+        // Pull the robot up (arms down, -ve motor speed) using operator triggers
+        // NOTE: Left trigger is already negative.
+        double leftClimbSpeed  = operatorController.getLeftTriggerAxis() * ClimbConstants.MAX_ROBOT_LIFT_SPEED;
+        double rightClimbSpeed = -operatorController.getRightTriggerAxis() * ClimbConstants.MAX_ROBOT_LIFT_SPEED;
 
-        boolean rightUp   = operatorController.getRightBumper();
-        boolean rightDown = (operatorController.getRightTriggerAxis() == 1);
-
-        if (leftUp) {
-            setLeftClimbSpeed(ClimbConstants.SLOW_CLIMB_SPEED);
-
-        }
-        else if (leftDown) {
-            setLeftClimbSpeed(-ClimbConstants.SLOW_CLIMB_SPEED);
-
+        // Bumpers lift the arms up in order to catch the chain
+        if (operatorController.getLeftBumper()) {
+            leftClimbSpeed = ClimbConstants.RAISE_CLIMBERS_SPEED;
         }
 
-        if (rightUp) {
-            setRightClimbSpeed(ClimbConstants.SLOW_CLIMB_SPEED);
-
-        }
-        else if (rightDown) {
-            setRightClimbSpeed(-ClimbConstants.SLOW_CLIMB_SPEED);
-
-        }
+        climbSubsystem.setClimbSpeeds(leftClimbSpeed, rightClimbSpeed);
 
     }
 
@@ -73,15 +61,4 @@ public class DefaultClimbCommand extends LoggingCommand {
     public void end(boolean interrupted) {
         logCommandEnd(interrupted);
     }
-
-    private void setLeftClimbSpeed(double speed) {
-
-        climbSubsystem.setLeftClimbSpeed(speed);
-    }
-
-    private void setRightClimbSpeed(double speed) {
-
-        climbSubsystem.setRightClimbSpeed(speed);
-    }
-
 }

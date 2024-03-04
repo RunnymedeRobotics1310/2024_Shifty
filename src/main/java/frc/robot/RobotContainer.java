@@ -60,7 +60,7 @@ public class RobotContainer {
 
         climbSubsystem.setDefaultCommand(
             new DefaultClimbCommand(
-                operatorInput.driverController, climbSubsystem));
+                operatorInput, climbSubsystem));
 
         armSubsystem.setDefaultCommand(
             new DefaultArmCommand(
