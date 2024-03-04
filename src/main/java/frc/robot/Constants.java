@@ -80,13 +80,20 @@ public final class Constants {
 
     public static final class ArmConstants {
 
-        public static final ArmPosition COMPACT_ARM_POSITION       = new ArmPosition(100.0, 75.0);
-        public static final ArmPosition OVER_BUMPER_POSITION       = new ArmPosition(60.0, 125.0);
-        public static final ArmPosition INTAKE_ARM_POSITION        = new ArmPosition(20.0, 160.0);
+        /*
+         * Key Arm Positions
+         */
+        public static final ArmPosition COMPACT_ARM_POSITION                 = new ArmPosition(100.0, 75.0);
+        public static final ArmPosition INTAKE_ARM_POSITION                  = new ArmPosition(20.0, 160.0);
 
-        public static final ArmPosition SHOOT_SPEAKER_ARM_POSITION = new ArmPosition(115.0, 90.0);
-        public static final ArmPosition SHOOT_AMP_ARM_POSITION     = new ArmPosition(125.0, 160.0);
-        public static final ArmPosition TRAP_ARM_POSITION          = new ArmPosition(145.0, 165.0);
+        // Transition position - over bumper
+        public static final ArmPosition OVER_BUMPER_POSITION                 = new ArmPosition(60.0, 125.0);
+        // Transition position - above the lock position (arm not caught on stops)
+        public static final ArmPosition UNLOCK_POSITION                      = new ArmPosition(105.0, 85.0);
+
+        public static final ArmPosition SHOOT_SPEAKER_ARM_POSITION           = new ArmPosition(115.0, 90.0);
+        public static final ArmPosition SHOOT_AMP_ARM_POSITION               = new ArmPosition(125.0, 160.0);
+        public static final ArmPosition TRAP_ARM_POSITION                    = new ArmPosition(145.0, 165.0);
 
         public static final double      FAST_AIM_SPEED             = .3;
         public static final double      SLOW_AIM_SPEED             = .1;
